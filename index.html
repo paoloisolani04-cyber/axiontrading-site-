@@ -1344,39 +1344,14 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
 </div>
 
 <!-- ═══════════ MODALS ═══════════ -->
-<div class="modal-overlay" id="modal-signup">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('signup')">&times;</button>
-    <h2>Create Your Account</h2>
-    <p>Create your account and choose a plan to start trading.</p>
-    <div class="modal-plan" id="modal-plan" style="display:none;">
-      <span class="plan-name" id="modal-plan-name"></span>
-      <span class="plan-price" id="modal-plan-price"></span>
-    </div>
-    <form onsubmit="handleSignup(event)">
-      <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe" required></div>
-      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
-      <div class="form-group"><label>Password</label><input type="password" placeholder="Min 8 characters" minlength="8" required></div>
-      <button type="submit" class="btn btn-primary btn-large">Create Account</button>
-    </form>
-    <div class="form-divider">or</div>
-    <button class="btn btn-secondary" style="width:100%;">Continue with Google</button>
-    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:16px;">By signing up, you agree to our Terms of Service and Privacy Policy.</p>
-  </div>
-</div>
 <div class="modal-overlay" id="modal-login">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('login')">&times;</button>
-    <h2>Welcome Back</h2>
-    <p>Log in to your Axion account.</p>
-    <form onsubmit="handleLogin(event)">
-      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
-      <div class="form-group"><label>Password</label><input type="password" placeholder="Your password" required></div>
-      <button type="submit" class="btn btn-primary btn-large">Log In</button>
-    </form>
-    <p style="text-align:center;margin-top:16px;"><a href="#" style="font-size:13px;">Forgot your password?</a></p>
-    <div class="form-divider">or</div>
-    <button class="btn btn-secondary" style="width:100%;">Continue with Google</button>
+    <h2>Manage Your Account</h2>
+    <p style="color:var(--text2);margin-bottom:28px;">Access your subscription, invoices, and billing details through the secure Stripe portal.</p>
+    <button class="btn btn-primary btn-large" style="width:100%;margin-bottom:12px;" onclick="openBillingPortal()">Open Billing Portal</button>
+    <button class="btn btn-ghost" style="width:100%;" onclick="closeModal('login')">Cancel</button>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:20px;">Need help? Email us at support@axiontrading.pro</p>
   </div>
 </div>
 
@@ -1799,20 +1774,8 @@ function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
 /* ═══════════════════════════════════════════════════
    MODALS
    ═══════════════════════════════════════════════════ */
-function openModal(type, plan) {
-  if (type === 'signup') {
-    document.getElementById('modal-signup').classList.add('active');
-    if (plan) {
-      const p = plan.split(' — ');
-      document.getElementById('modal-plan').style.display = 'flex';
-      document.getElementById('modal-plan-name').textContent = p[0];
-      document.getElementById('modal-plan-price').textContent = p[1] || '';
-    } else {
-      document.getElementById('modal-plan').style.display = 'none';
-    }
-  } else {
-    document.getElementById('modal-login').classList.add('active');
-  }
+function openModal(type) {
+  document.getElementById('modal-login').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 function closeModal(type) {
@@ -1825,69 +1788,6 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 document.addEventListener('keydown', e => {
   if(e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(o=>{o.classList.remove('active');document.body.style.overflow='';});
 });
-function handleSignup(e) {
-  e.preventDefault();
-  const form = e.target;
-  const name = form.querySelector('input[type="text"]').value;
-  const email = form.querySelector('input[type="email"]').value;
-  const btn = form.querySelector('button[type="submit"]');
-  const planEl = document.getElementById('modal-plan-name');
-  const plan = planEl && document.getElementById('modal-plan').style.display !== 'none' ? planEl.textContent : 'Monthly';
-
-  btn.textContent='Creating account...'; btn.disabled=true;
-  setTimeout(() => {
-    // Save user
-    const user = { name, email, plan, planPrice: getPlanPrice(plan), joined: new Date().toISOString(), status: 'active' };
-    localStorage.setItem('tb_user', JSON.stringify(user));
-    btn.textContent='Account created!'; btn.style.background='linear-gradient(135deg,#10B981,#059669)';
-    setTimeout(() => {
-      closeModal('signup');
-      btn.textContent='Create Account'; btn.style.background=''; btn.disabled=false;
-      form.reset();
-      loginUser(user);
-    }, 1200);
-  }, 1500);
-}
-
-function handleLogin(e) {
-  e.preventDefault();
-  const form = e.target;
-  const email = form.querySelector('input[type="email"]').value;
-  const btn = form.querySelector('button[type="submit"]');
-  btn.textContent='Logging in...'; btn.disabled=true;
-
-  // Check if user exists in localStorage
-  const stored = localStorage.getItem('tb_user');
-  setTimeout(() => {
-    if (stored) {
-      const user = JSON.parse(stored);
-      btn.textContent='Welcome back!'; btn.style.background='linear-gradient(135deg,#10B981,#059669)';
-      setTimeout(() => {
-        closeModal('login');
-        btn.textContent='Log In'; btn.style.background=''; btn.disabled=false;
-        form.reset();
-        loginUser(user);
-      }, 1000);
-    } else {
-      // Create account from login
-      const user = { name: email.split('@')[0], email, plan: 'Monthly', planPrice: '$49/mo', joined: new Date().toISOString(), status: 'active' };
-      localStorage.setItem('tb_user', JSON.stringify(user));
-      btn.textContent='Welcome!'; btn.style.background='linear-gradient(135deg,#10B981,#059669)';
-      setTimeout(() => {
-        closeModal('login');
-        btn.textContent='Log In'; btn.style.background=''; btn.disabled=false;
-        form.reset();
-        loginUser(user);
-      }, 1000);
-    }
-  }, 1200);
-}
-
-function getPlanPrice(plan) {
-  if (plan.includes('Lifetime')) return '$799 one-time';
-  if (plan.includes('Annual') || plan.includes('Pro')) return '$29/mo, billed yearly';
-  return '$49/mo';
-}
 
 function loginUser(user) {
   localStorage.setItem('tb_logged_in', '1');
@@ -1951,31 +1851,10 @@ function showUserDashboard() {
 
   // Billing status badge
   const bsBadge = document.getElementById('billing-status-badge');
-  const cancelBtn = document.getElementById('btn-cancel-plan');
-  const cancelMsg = document.getElementById('billing-cancelled-msg');
-  if (user.status === 'cancelled') {
-    bsBadge.textContent = 'Cancelled';
-    bsBadge.style.background = 'rgba(239,68,68,0.1)';
-    bsBadge.style.color = 'var(--red2)';
-    cancelMsg.style.display = 'block';
-    cancelBtn.disabled = true;
-    cancelBtn.style.opacity = '0.4';
-    cancelBtn.style.cursor = 'not-allowed';
-  } else {
+  if (bsBadge) {
     bsBadge.textContent = 'Active';
     bsBadge.style.background = 'rgba(16,185,129,0.1)';
     bsBadge.style.color = 'var(--green2)';
-    cancelMsg.style.display = 'none';
-    cancelBtn.disabled = false;
-    cancelBtn.style.opacity = '';
-    cancelBtn.style.cursor = '';
-  }
-
-  // Payment method from localStorage
-  const payment = JSON.parse(localStorage.getItem('tb_payment') || '{}');
-  if (payment.last4) {
-    document.getElementById('payment-card-number').textContent = '\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 ' + payment.last4;
-    document.getElementById('payment-card-expiry').textContent = 'Expires ' + payment.expiry;
   }
 
   // Billing history
@@ -2076,110 +1955,6 @@ function updatePassword() {
   setTimeout(() => { successEl.style.display = 'none'; }, 4000);
 }
 
-/* ═══════════════════════════════════════════════════
-   PAYMENT METHOD
-   ═══════════════════════════════════════════════════ */
-function showPaymentForm() {
-  document.getElementById('payment-form').style.display = 'block';
-  document.getElementById('payment-error').style.display = 'none';
-  const stored = JSON.parse(localStorage.getItem('tb_payment') || '{}');
-  if (stored.last4) document.getElementById('pay-card-last4').value = stored.last4;
-  if (stored.expiry) document.getElementById('pay-card-expiry').value = stored.expiry;
-}
-
-function savePaymentMethod() {
-  const last4 = document.getElementById('pay-card-last4').value.trim();
-  const expiry = document.getElementById('pay-card-expiry').value.trim();
-  const errEl = document.getElementById('payment-error');
-  errEl.style.display = 'none';
-
-  if (!/^\d{4}$/.test(last4)) {
-    errEl.textContent = 'Enter exactly 4 digits for card number.';
-    errEl.style.display = 'block';
-    return;
-  }
-  if (!/^\d{2}\/\d{2}$/.test(expiry)) {
-    errEl.textContent = 'Enter expiry in MM/YY format.';
-    errEl.style.display = 'block';
-    return;
-  }
-
-  localStorage.setItem('tb_payment', JSON.stringify({ last4, expiry }));
-  document.getElementById('payment-card-number').textContent = '\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 ' + last4;
-  document.getElementById('payment-card-expiry').textContent = 'Expires ' + expiry;
-  document.getElementById('payment-form').style.display = 'none';
-}
-
-/* ═══════════════════════════════════════════════════
-   CANCEL PLAN
-   ═══════════════════════════════════════════════════ */
-function cancelPlan() {
-  if (!confirm('Cancel your subscription?')) return;
-  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
-  user.status = 'cancelled';
-  localStorage.setItem('tb_user', JSON.stringify(user));
-
-  // Update billing display
-  document.getElementById('billing-status-badge').textContent = 'Cancelled';
-  document.getElementById('billing-status-badge').style.background = 'rgba(239,68,68,0.1)';
-  document.getElementById('billing-status-badge').style.color = 'var(--red2)';
-  document.getElementById('billing-cancelled-msg').style.display = 'block';
-  document.getElementById('btn-cancel-plan').disabled = true;
-  document.getElementById('btn-cancel-plan').style.opacity = '0.4';
-  document.getElementById('btn-cancel-plan').style.cursor = 'not-allowed';
-
-  // Update top-level plan badge
-  const badge = document.getElementById('dash-plan-badge');
-  badge.textContent = 'Cancelled';
-  badge.style.background = 'rgba(239,68,68,0.1)';
-  badge.style.color = 'var(--red2)';
-  badge.style.borderColor = 'rgba(239,68,68,0.15)';
-}
-
-/* ═══════════════════════════════════════════════════
-   CHANGE PLAN
-   ═══════════════════════════════════════════════════ */
-function showChangePlan() {
-  const panel = document.getElementById('change-plan-options');
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-  // Pre-select current plan
-  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
-  const radios = document.querySelectorAll('input[name="plan-choice"]');
-  radios.forEach(r => { r.checked = r.value === (user.plan || 'Monthly'); });
-}
-
-function confirmChangePlan() {
-  const selected = document.querySelector('input[name="plan-choice"]:checked');
-  if (!selected) { alert('Please select a plan.'); return; }
-
-  const plan = selected.value;
-  const price = getPlanPrice(plan);
-  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
-  user.plan = plan;
-  user.planPrice = price;
-  user.status = 'active';
-  localStorage.setItem('tb_user', JSON.stringify(user));
-
-  // Update all displays
-  document.getElementById('billing-plan-name').textContent = plan;
-  document.getElementById('billing-plan-price').textContent = price;
-  document.getElementById('dash-plan-name').textContent = plan;
-  document.getElementById('change-plan-options').style.display = 'none';
-
-  // Reset cancelled state if re-subscribing
-  document.getElementById('billing-status-badge').textContent = 'Active';
-  document.getElementById('billing-status-badge').style.background = 'rgba(16,185,129,0.1)';
-  document.getElementById('billing-status-badge').style.color = 'var(--green2)';
-  document.getElementById('billing-cancelled-msg').style.display = 'none';
-  document.getElementById('btn-cancel-plan').disabled = false;
-  document.getElementById('btn-cancel-plan').style.opacity = '';
-  document.getElementById('btn-cancel-plan').style.cursor = '';
-  const badge = document.getElementById('dash-plan-badge');
-  badge.textContent = 'Active';
-  badge.style.background = 'rgba(16,185,129,0.1)';
-  badge.style.color = 'var(--green2)';
-  badge.style.borderColor = 'rgba(16,185,129,0.15)';
-}
 
 /* ═══════════════════════════════════════════════════
    NAVBAR NAVIGATION (from dashboard back to marketing)
