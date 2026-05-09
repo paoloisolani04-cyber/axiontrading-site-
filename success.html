@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Axion</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233B82F6'/><stop offset='1' stop-color='%238B5CF6'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><line x1='16' y1='5' x2='4' y2='27' stroke='white' stroke-width='3' stroke-linecap='round'/><line x1='16' y1='5' x2='28' y2='27' stroke='white' stroke-width='3' stroke-linecap='round'/><line x1='9' y1='19' x2='23' y2='19' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #06070A; --bg2: #0C0E14; --surface: #161923;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.1);
+  --text: #EAEDF3; --text2: #8B8FA7; --text3: #555872;
+  --accent: #3B82F6; --green: #10B981; --green2: #34D399;
+  --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+body {
+  font-family: var(--font); background: var(--bg); color: var(--text);
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  -webkit-font-smoothing: antialiased; padding: 24px;
+}
+.card {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 24px; padding: 56px 48px; max-width: 520px; width: 100%;
+  text-align: center;
+  box-shadow: 0 0 80px rgba(16,185,129,0.08), 0 0 0 1px rgba(16,185,129,0.06);
+  animation: fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+.icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05));
+  border: 1px solid rgba(16,185,129,0.3);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px; font-size: 32px;
+  box-shadow: 0 0 40px rgba(16,185,129,0.15);
+}
+h1 { font-size: 32px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
+.subtitle { font-size: 16px; color: var(--text2); line-height: 1.6; margin-bottom: 36px; }
+
+.steps { text-align: left; margin-bottom: 36px; }
+.steps h3 { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.step {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px; border-radius: 12px; margin-bottom: 8px;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.step:hover { border-color: var(--border2); }
+.step-num {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent), #6366f1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: white;
+}
+.step-text { font-size: 14px; line-height: 1.5; }
+.step-text strong { display: block; font-weight: 700; margin-bottom: 2px; }
+.step-text span { color: var(--text2); }
+
+.email-box {
+  background: rgba(16,185,129,0.04); border: 1px solid rgba(16,185,129,0.15);
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 32px;
+  font-size: 14px; color: var(--text2); line-height: 1.6;
+}
+.email-box strong { color: var(--green2); }
+
+.btn {
+  display: inline-block; padding: 14px 32px; border-radius: 12px;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
+  cursor: pointer; border: none; text-decoration: none;
+  transition: all 0.2s; width: 100%; text-align: center;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #6366f1);
+  color: white; box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(59,130,246,0.4); }
+.btn-ghost {
+  background: transparent; color: var(--text2);
+  border: 1px solid var(--border2); margin-top: 10px;
+}
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+.logo { font-size: 13px; font-weight: 700; color: var(--text3); margin-top: 28px; }
+.logo a { color: var(--text3); text-decoration: none; }
+.logo a:hover { color: var(--text2); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">✓</div>
+  <h1>You're in. Welcome.</h1>
+  <p class="subtitle">Your payment was successful. Check your email for your receipt — then follow the steps below to get started.</p>
+
+  <div class="steps">
+    <h3>Getting Started</h3>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <strong>Check your email</strong>
+        <span>Stripe sent your receipt to the email you used at checkout. Save it.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <strong>Download Axion</strong>
+        <span>We'll email you the download link and setup guide within 24 hours.</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <strong>Connect your exchange</strong>
+        <span>Add your Coinbase, Kraken, or Binance API key to start receiving signals.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="email-box">
+    Questions? Email us at <strong>support@axiontrading.pro</strong> — we reply within a few hours.
+  </div>
+
+  <a href="/" class="btn btn-primary">Back to Homepage</a>
+  <a href="https://billing.stripe.com/p/login/7sYfZicf6evT7168kBfnO00" class="btn btn-ghost" target="_blank">Manage Billing</a>
+</div>
+</body>
+</html>

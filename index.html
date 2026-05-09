@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axion — BTC Trading Signals</title>
+<meta name="description" content="Professional BTC trading signals powered by strategies from the world's top traders. 82% win rate. Automated execution on Coinbase, Kraken & Binance.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233B82F6'/><stop offset='1' stop-color='%238B5CF6'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><line x1='16' y1='5' x2='4' y2='27' stroke='white' stroke-width='3' stroke-linecap='round'/><line x1='16' y1='5' x2='28' y2='27' stroke='white' stroke-width='3' stroke-linecap='round'/><line x1='9' y1='19' x2='23' y2='19' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   RESET & VARIABLES
+   ═══════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #06070A; --bg2: #0C0E14; --bg3: #12141C;
+  --surface: #161923; --surface2: #1C1F2E; --surface3: #232738;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.1);
+  --text: #EAEDF3; --text2: #8B8FA7; --text3: #555872;
+  --accent: #3B82F6; --accent2: #60A5FA; --accent-glow: rgba(59,130,246,0.3);
+  --green: #10B981; --green2: #34D399; --green-glow: rgba(16,185,129,0.25);
+  --red: #EF4444; --red2: #F87171;
+  --yellow: #F59E0B; --purple: #8B5CF6; --purple2: #A78BFA; --gold: #F59E0B;
+  --radius: 16px; --radius-sm: 10px;
+  --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font); background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; line-height: 1.6;
+}
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--text); }
+
+/* ═══════════════════════════════════════════════════
+   PRELOADER
+   ═══════════════════════════════════════════════════ */
+.preloader {
+  position: fixed; inset: 0; z-index: 99999; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.preloader-logo {
+  width: 60px; height: 60px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 900; color: white;
+  animation: preloaderPulse 1.2s ease infinite;
+  margin-bottom: 24px;
+}
+.preloader-bar {
+  width: 200px; height: 3px; background: var(--surface2); border-radius: 3px; overflow: hidden;
+}
+.preloader-fill {
+  height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--purple));
+  border-radius: 3px; animation: preloaderFill 1.8s ease forwards;
+}
+@keyframes preloaderPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 0 30px 10px rgba(59,130,246,0.2); }
+}
+@keyframes preloaderFill { to { width: 100%; } }
+
+
+/* ═══════════════════════════════════════════════════
+   SCROLL PROGRESS
+   ═══════════════════════════════════════════════════ */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 10001;
+  background: linear-gradient(90deg, var(--accent), var(--purple), var(--green));
+  background-size: 200% 100%; animation: gradientShift 3s ease infinite;
+  width: 0; transition: width 0.1s linear;
+}
+
+/* ═══════════════════════════════════════════════════
+   KEYFRAMES
+   ═══════════════════════════════════════════════════ */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(50px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeInDown { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes scaleIn { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+@keyframes slideInLeft { from { opacity:0; transform:translateX(-80px); } to { opacity:1; transform:translateX(0); } }
+@keyframes slideInRight { from { opacity:0; transform:translateX(80px); } to { opacity:1; transform:translateX(0); } }
+@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+@keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+@keyframes float2 { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-10px) rotate(3deg)} }
+@keyframes liveDot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.8);opacity:0.4} }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes morphBlob {
+  0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 60% 30% 60% / 30% 50% 70% 60%; }
+  75% { border-radius: 60% 30% 50% 40% / 70% 40% 60% 30%; }
+}
+@keyframes rotateBorder {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+@keyframes typewriter { from { width: 0; } to { width: 100%; } }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes gridMove { 0%{transform:translate(0,0)} 100%{transform:translate(40px,40px)} }
+@keyframes orbitSlow { 0%{transform:rotate(0deg) translateX(200px) rotate(0deg)} 100%{transform:rotate(360deg) translateX(200px) rotate(-360deg)} }
+@keyframes tradeSlideIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes tradeGlow { 0%{border-left-color:var(--green)} 100%{border-left-color:transparent} }
+@keyframes countFlip { 0%{transform:translateY(100%);opacity:0} 60%{transform:translateY(-10%);opacity:1} 100%{transform:translateY(0);opacity:1} }
+@keyframes drawLine { from{stroke-dashoffset:2000} to{stroke-dashoffset:0} }
+@keyframes borderRotate { 0%{background-position:0% 0%} 100%{background-position:200% 200%} }
+@keyframes popIn { 0%{transform:scale(0) rotate(-10deg);opacity:0} 60%{transform:scale(1.1) rotate(2deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+@keyframes iconBounce { 0%,100%{transform:translateY(0)} 40%{transform:translateY(-8px)} 60%{transform:translateY(-4px)} }
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 20px rgba(59,130,246,0.2), inset 0 0 20px rgba(59,130,246,0.05); }
+  50% { box-shadow: 0 0 40px rgba(59,130,246,0.4), 0 0 80px rgba(59,130,246,0.15), inset 0 0 30px rgba(59,130,246,0.08); }
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLL ANIMATIONS
+   ═══════════════════════════════════════════════════ */
+.anim { opacity:0; transform:translateY(50px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+.anim.vis { opacity:1; transform:translateY(0); }
+.anim.from-left { transform:translateX(-80px); }
+.anim.from-left.vis { transform:translateX(0); }
+.anim.from-right { transform:translateX(80px); }
+.anim.from-right.vis { transform:translateX(0); }
+.anim.scale-up { transform:scale(0.85); }
+.anim.scale-up.vis { transform:scale(1); }
+.anim.d1{transition-delay:.1s} .anim.d2{transition-delay:.2s} .anim.d3{transition-delay:.3s}
+.anim.d4{transition-delay:.4s} .anim.d5{transition-delay:.5s} .anim.d6{transition-delay:.6s}
+
+/* ═══════════════════════════════════════════════════
+   PARTICLES CANVAS
+   ═══════════════════════════════════════════════════ */
+#particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ═══════════════════════════════════════════════════
+   GRID BG
+   ═══════════════════════════════════════════════════ */
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.grid-bg::before {
+  content: ''; position: absolute; inset: -40px;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px; animation: gridMove 25s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════
+   MORPHING BLOBS
+   ═══════════════════════════════════════════════════ */
+.blob {
+  position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+  animation: morphBlob 12s ease-in-out infinite;
+}
+.blob-1 {
+  width: 600px; height: 600px; top: -200px; left: -100px;
+  background: rgba(59,130,246,0.08); animation-duration: 15s;
+}
+.blob-2 {
+  width: 500px; height: 500px; top: -100px; right: -150px;
+  background: rgba(139,92,246,0.06); animation-duration: 18s; animation-delay: -5s;
+}
+.blob-3 {
+  width: 400px; height: 400px; bottom: -100px; left: 30%;
+  background: rgba(16,185,129,0.05); animation-duration: 20s; animation-delay: -10s;
+}
+
+/* ═══════════════════════════════════════════════════
+   NAVBAR
+   ═══════════════════════════════════════════════════ */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 48px; height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(6,7,10,0.7); backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  animation: fadeInDown 0.8s var(--ease);
+  transition: height 0.4s var(--ease), background 0.4s, box-shadow 0.4s;
+}
+.navbar.scrolled {
+  height: 56px; background: rgba(6,7,10,0.92);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 20px; font-weight: 800; color: var(--text); letter-spacing: -0.5px;
+}
+.logo-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: #0D0F16; border: 1px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.4s var(--spring);
+  position: relative;
+}
+.logo-icon svg { width: 18px; height: 18px; }
+.nav-logo:hover .logo-icon { transform: rotate(-8deg) scale(1.1); }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 14px; font-weight: 500; color: var(--text2);
+  transition: color 0.3s; position: relative; padding: 4px 0;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px;
+  background: var(--accent); transition: width 0.3s var(--ease), left 0.3s var(--ease);
+  border-radius: 1px;
+}
+.nav-links a:hover::after { width: 100%; left: 0; }
+.nav-actions { display: flex; gap: 12px; }
+
+/* ═══════════════════════════════════════════════════
+   BUTTONS
+   ═══════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 28px; border-radius: var(--radius-sm); font-family: var(--font);
+  font-size: 14px; font-weight: 600; cursor: pointer; border: none;
+  transition: all 0.3s var(--ease); position: relative; overflow: hidden;
+}
+.btn .ripple {
+  position: absolute; border-radius: 50%; background: rgba(255,255,255,0.3);
+  transform: scale(0); animation: ripple 0.6s ease-out forwards; pointer-events: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #2563EB);
+  color: white; box-shadow: 0 4px 20px var(--accent-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 40px var(--accent-glow);
+}
+.btn-primary::after {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%); transition: none;
+}
+.btn-primary:hover::after { transform: translateX(100%); transition: transform 0.6s ease; }
+.btn-secondary {
+  background: var(--surface2); color: var(--text); border: 1px solid var(--border2);
+}
+.btn-secondary:hover {
+  background: var(--surface3); border-color: var(--accent);
+  transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.btn-ghost { background: transparent; color: var(--text2); padding: 10px 20px; }
+.btn-ghost:hover { color: var(--text); }
+.btn-large { padding: 16px 36px; font-size: 16px; border-radius: var(--radius); }
+.btn-green {
+  background: linear-gradient(135deg, var(--green), #059669);
+  color: white; box-shadow: 0 4px 20px var(--green-glow);
+}
+.btn-green:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 40px var(--green-glow); }
+.btn-sm { padding: 8px 18px; font-size: 13px; }
+.form-group select {
+  width: 100%; padding: 12px 16px; border-radius: var(--radius-sm);
+  background: var(--bg2); border: 1.5px solid var(--border2); color: var(--text);
+  font-family: var(--font); font-size: 14px; transition: border-color 0.3s;
+}
+.form-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
+
+/* ═══════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════ */
+.hero {
+  position: relative; min-height: 100vh; display: flex; align-items: center;
+  padding: 120px 48px 80px; overflow: hidden;
+}
+.hero-content {
+  position: relative; z-index: 2; max-width: 620px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 18px 7px 10px; border-radius: 100px;
+  background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+  font-size: 13px; font-weight: 600; color: var(--green2); margin-bottom: 28px;
+  animation: fadeInUp 0.8s var(--ease) 2s both;
+  backdrop-filter: blur(8px);
+}
+.hero-badge .live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+  animation: liveDot 2s ease infinite;
+}
+.hero h1 {
+  font-size: clamp(44px, 5.5vw, 76px); font-weight: 900; line-height: 1.08;
+  letter-spacing: -2.5px; margin-bottom: 24px;
+  min-height: 2.2em;
+}
+.hero h1 .typed-cursor {
+  display: inline-block; width: 3px; height: 0.85em; background: var(--accent);
+  margin-left: 2px; vertical-align: text-bottom;
+  animation: blink 0.7s step-end infinite;
+}
+.hero h1 .gradient-wrap {
+  color: var(--accent2);
+}
+/* Hero chart background */
+.hero-chart-bg {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
+  z-index: 1; pointer-events: none; opacity: 0;
+  animation: fadeIn 2s ease 3.5s forwards;
+}
+.hero-chart-line {
+  stroke-dasharray: 2000; stroke-dashoffset: 2000;
+  animation: drawLine 3s ease 3.5s forwards;
+}
+.hero-chart-fill {
+  opacity: 0; animation: fadeIn 1.5s ease 5s forwards;
+}
+
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px;
+  opacity: 0; animation: fadeInUp 0.8s var(--ease) forwards;
+  animation-play-state: paused;
+}
+.hero-actions.go { animation-play-state: running; }
+.hero-trust {
+  display: flex; align-items: center; gap: 24px;
+  font-size: 13px; color: var(--text3);
+  opacity: 0; animation: fadeInUp 0.8s var(--ease) 0.15s forwards;
+  animation-play-state: paused;
+}
+.hero-trust.go { animation-play-state: running; }
+.hero-trust-item { display: flex; align-items: center; gap: 6px; }
+.hero-trust-item svg { width: 16px; height: 16px; color: var(--green); }
+
+/* Hero floating elements */
+.hero-floaters {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+}
+.hero-float {
+  position: absolute; border-radius: 12px; padding: 10px 16px;
+  background: var(--surface); border: 1px solid var(--border2);
+  font-size: 12px; font-family: var(--mono); font-weight: 600;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  opacity: 0; animation: popIn 0.6s var(--spring) both;
+}
+.hf-1 { top: 18%; right: 8%; animation-delay: 3.2s; animation-duration: 0.8s; }
+.hf-1::after { content: ''; position: absolute; inset: -1px; border-radius: 12px; background: linear-gradient(135deg, rgba(16,185,129,0.3), transparent, rgba(59,130,246,0.3)); z-index: -1; }
+.hf-2 { top: 18%; right: 28%; animation-delay: 3.6s; }
+.hf-3 { top: 18%; right: 48%; animation-delay: 4s; }
+.hf-1 .val { color: var(--green2); } .hf-2 .val { color: var(--accent2); } .hf-3 .val { color: var(--purple2); }
+
+.hero-float.float-anim-1 { animation: popIn 0.8s var(--spring) both, float 6s ease-in-out 4s infinite; }
+.hero-float.float-anim-2 { animation: popIn 0.6s var(--spring) both, float2 7s ease-in-out 4.4s infinite; }
+.hero-float.float-anim-3 { animation: popIn 0.6s var(--spring) both, float 8s ease-in-out 4.8s infinite; }
+
+/* Hero right — live panel */
+.hero-right {
+  position: absolute; right: 48px; top: 50%; transform: translateY(-50%);
+  width: 440px; z-index: 2;
+  animation: slideInRight 1s var(--ease) 2.5s both;
+}
+@media (max-width: 1300px) { .hero-right { width: 400px; right: 32px; } }
+@media (max-width: 1200px) { .hero-right { display: none; } }
+.live-panel {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  animation: glowPulse 4s ease infinite;
+}
+.live-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+}
+.live-panel-title {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text2);
+}
+.live-panel-title .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  animation: liveDot 2s ease infinite;
+}
+.live-panel-badge {
+  font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px;
+  background: rgba(16,185,129,0.15); color: var(--green2);
+}
+.trade-feed { max-height: 420px; overflow: hidden; }
+.trade-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.trade-item:hover { background: rgba(255,255,255,0.02); }
+.trade-item.new { animation: tradeSlideIn 0.4s ease; border-left: 2px solid transparent; animation: tradeSlideIn 0.4s ease, tradeGlow 3s ease; }
+.trade-left { display: flex; flex-direction: column; gap: 2px; }
+.trade-pair { font-size: 14px; font-weight: 700; }
+.trade-strategy { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+.trade-right { text-align: right; }
+.trade-pnl { font-size: 15px; font-weight: 700; font-family: var(--mono); }
+.trade-pnl.win { color: var(--green2); } .trade-pnl.loss { color: var(--red2); }
+.trade-time { font-size: 11px; color: var(--text3); }
+.trade-badge {
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 6px;
+  border-radius: 4px; margin-left: 6px;
+}
+.trade-badge.long { background: rgba(16,185,129,0.15); color: var(--green2); }
+.trade-badge.short { background: rgba(239,68,68,0.15); color: var(--red2); }
+
+/* ═══════════════════════════════════════════════════
+   TICKER BAR
+   ═══════════════════════════════════════════════════ */
+.ticker-bar {
+  position: relative; z-index: 2; padding: 14px 0;
+  background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+.ticker-track {
+  display: flex; gap: 48px; white-space: nowrap;
+  animation: tickerScroll 35s linear infinite;
+}
+.ticker-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; font-family: var(--mono);
+}
+.ticker-item .label { color: var(--text3); } .ticker-item .value { color: var(--text); }
+.ticker-item .change.up { color: var(--green2); } .ticker-item .change.down { color: var(--red2); }
+
+/* ═══════════════════════════════════════════════════
+   SECTIONS
+   ═══════════════════════════════════════════════════ */
+section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent2); margin-bottom: 16px;
+}
+.section-label .line {
+  width: 32px; height: 2px; border-radius: 1px;
+  background: linear-gradient(90deg, var(--accent), var(--purple));
+}
+.section-title {
+  font-size: clamp(32px, 3.5vw, 52px); font-weight: 800; letter-spacing: -1.5px;
+  line-height: 1.15; margin-bottom: 16px;
+}
+.section-subtitle {
+  font-size: 17px; color: var(--text2); max-width: 600px; line-height: 1.7; margin-bottom: 56px;
+}
+.container { max-width: 1200px; margin: 0 auto; }
+
+/* ═══════════════════════════════════════════════════
+   STATS
+   ═══════════════════════════════════════════════════ */
+.stats-section {
+  padding: 80px 48px; position: relative; z-index: 2;
+  background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+  max-width: 1000px; margin: 0 auto;
+}
+.stat-card { text-align: center; }
+.stat-value {
+  font-size: 52px; font-weight: 900; letter-spacing: -2px; line-height: 1;
+  margin-bottom: 8px; font-family: var(--mono);
+}
+.stat-value.green { color: var(--green2); } .stat-value.accent { color: var(--accent2); }
+.stat-value.purple { color: var(--purple2); } .stat-value.gold { color: var(--gold); }
+.stat-label { font-size: 14px; color: var(--text2); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════
+   FEATURES — ANIMATED GRADIENT BORDER CARDS
+   ═══════════════════════════════════════════════════ */
+.features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.feature-card {
+  position: relative; border-radius: 18px; padding: 2px; /* border via background gradient */
+  background: var(--border);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s;
+  /* 3D tilt handled via JS */
+}
+.feature-card:hover {
+  transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.feature-card.card-glow {
+  background: linear-gradient(135deg, var(--accent), var(--purple), var(--green), var(--accent));
+  background-size: 300% 300%; animation: borderRotate 4s linear infinite;
+}
+.feature-card-inner {
+  background: var(--surface); border-radius: 16px; padding: 32px; height: 100%;
+  position: relative; overflow: hidden;
+}
+.feature-card-inner::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 120px;
+  background: linear-gradient(180deg, rgba(59,130,246,0.04) 0%, transparent 100%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.feature-card:hover .feature-card-inner::after { opacity: 1; }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 20px;
+  transition: transform 0.4s var(--spring);
+}
+.feature-card:hover .feature-icon { transform: scale(1.15) rotate(-5deg); animation: iconBounce 0.6s ease; }
+.feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; position: relative; z-index: 1; }
+.feature-card .trader { font-size: 13px; color: var(--accent2); margin-bottom: 12px; font-weight: 500; position: relative; z-index: 1; }
+.feature-card p { font-size: 14px; color: var(--text2); line-height: 1.7; margin-bottom: 16px; position: relative; z-index: 1; }
+.feature-stats {
+  display: flex; gap: 20px; padding-top: 16px; border-top: 1px solid var(--border);
+  position: relative; z-index: 1;
+}
+.feature-stat { font-size: 12px; }
+.feature-stat .label { color: var(--text3); }
+.feature-stat .val { font-weight: 700; font-family: var(--mono); }
+.feature-stat .val.green { color: var(--green2); }
+
+/* ═══════════════════════════════════════════════════
+   HOW IT WORKS — WITH ANIMATED CONNECTOR LINE
+   ═══════════════════════════════════════════════════ */
+.steps-container { position: relative; }
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; position: relative; z-index: 2; }
+.steps-line {
+  position: absolute; top: 52px; left: calc(16.66% + 28px); right: calc(16.66% + 28px);
+  height: 2px; z-index: 1;
+  background: linear-gradient(90deg, var(--accent), var(--purple), var(--green));
+  transform-origin: left; transform: scaleX(0); transition: transform 1.5s var(--ease);
+}
+.steps-line.vis { transform: scaleX(1); }
+.step-card {
+  text-align: center; padding: 40px 32px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); transition: all 0.4s var(--ease);
+  position: relative;
+}
+.step-card:hover {
+  border-color: var(--accent); transform: translateY(-6px);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.3);
+}
+.step-number {
+  width: 56px; height: 56px; border-radius: 16px; margin: 0 auto 20px;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 800; color: white;
+  transition: transform 0.4s var(--spring), box-shadow 0.4s;
+}
+.step-card:hover .step-number {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 0 30px var(--accent-glow);
+}
+.step-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.step-card p { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+/* ═══════════════════════════════════════════════════
+   PERFORMANCE
+   ═══════════════════════════════════════════════════ */
+.perf-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+.perf-chart-container {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px; overflow: hidden;
+}
+.perf-chart-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+.perf-chart-header h3 { font-size: 16px; font-weight: 700; }
+.perf-total {
+  font-size: 22px; font-weight: 800; font-family: var(--mono);
+  background: linear-gradient(90deg, var(--green2), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.chart-canvas { width: 100%; height: 280px; }
+.monthly-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.month-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: all 0.3s var(--ease);
+}
+.month-card:hover { border-color: var(--border2); transform: translateX(4px); }
+.month-name { font-size: 14px; font-weight: 600; }
+.month-return { font-size: 16px; font-weight: 700; font-family: var(--mono); }
+.month-return.up { color: var(--green2); } .month-return.down { color: var(--red2); }
+.month-trades { font-size: 11px; color: var(--text3); }
+
+/* ═══════════════════════════════════════════════════
+   PRICING — 3D TILT CARDS
+   ═══════════════════════════════════════════════════ */
+#pricing { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.pricing-toggle {
+  display: flex; justify-content: center; gap: 0; margin-bottom: 48px;
+  background: var(--surface); border-radius: 100px; padding: 4px;
+  width: fit-content; margin-left: auto; margin-right: auto;
+  border: 1px solid var(--border);
+}
+.pricing-toggle button {
+  padding: 10px 28px; border-radius: 100px; border: none;
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  background: transparent; color: var(--text2); cursor: pointer;
+  transition: all 0.3s; position: relative;
+}
+.pricing-toggle button.active {
+  background: var(--accent); color: white;
+  box-shadow: 0 4px 15px var(--accent-glow);
+}
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  max-width: 960px; margin: 0 auto;
+}
+.price-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px 32px; position: relative;
+  transition: all 0.5s var(--ease); overflow: hidden;
+  /* 3D tilt via JS */
+  transform-style: preserve-3d; perspective: 1000px;
+}
+.price-card:hover {
+  box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+}
+.price-card.popular {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, rgba(59,130,246,0.06) 0%, var(--surface) 40%);
+}
+.price-card.popular::before {
+  content: 'MOST POPULAR'; position: absolute; top: 0; left: 0; right: 0;
+  text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 2px;
+  padding: 8px; color: white;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  background-size: 200% 200%; animation: gradientShift 3s ease infinite;
+}
+.price-card.popular { padding-top: 56px; }
+/* Animated shine overlay */
+.price-card::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  transition: none; transform: skewX(-20deg);
+}
+.price-card:hover::after { left: 150%; transition: left 0.8s ease; }
+.price-tier { font-size: 14px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.price-amount { margin-bottom: 8px; }
+.price-amount .currency { font-size: 24px; font-weight: 700; color: var(--text2); vertical-align: top; }
+.price-amount .value { font-size: 56px; font-weight: 900; letter-spacing: -3px; }
+.price-amount .period { font-size: 15px; color: var(--text3); }
+.price-desc { font-size: 14px; color: var(--text3); margin-bottom: 28px; line-height: 1.6; }
+.price-features { list-style: none; margin-bottom: 32px; }
+.price-features li {
+  font-size: 14px; color: var(--text2); padding: 8px 0;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+  transition: transform 0.3s, color 0.3s;
+}
+.price-features li:hover { transform: translateX(4px); color: var(--text); }
+.price-features li:last-child { border: none; }
+.price-features .check { color: var(--green); font-weight: 700; font-size: 16px; }
+.price-card .btn { width: 100%; }
+.price-save {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 3px 8px; border-radius: 4px;
+  background: rgba(16,185,129,0.15); color: var(--green2); margin-left: 8px;
+}
+
+/* ═══════════════════════════════════════════════════
+   TESTIMONIALS — MARQUEE SCROLL
+   ═══════════════════════════════════════════════════ */
+.testimonials-track-container { overflow: hidden; position: relative; }
+.testimonials-track-container::before, .testimonials-track-container::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+}
+.testimonials-track-container::before { left: 0; background: linear-gradient(90deg, var(--bg2), transparent); }
+.testimonials-track-container::after { right: 0; background: linear-gradient(-90deg, var(--bg2), transparent); }
+.testimonials-track {
+  display: flex; gap: 20px; animation: tickerScroll 40s linear infinite;
+  width: max-content;
+}
+.testimonials-track:hover { animation-play-state: paused; }
+.testimonial-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px; min-width: 360px; flex-shrink: 0;
+  transition: all 0.4s var(--ease);
+}
+.testimonial-card:hover { border-color: var(--border2); transform: translateY(-4px) scale(1.02); }
+.testimonial-stars { color: var(--gold); font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+.testimonial-text { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 20px; font-style: italic; }
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 700; color: white;
+}
+.testimonial-name { font-size: 14px; font-weight: 600; }
+.testimonial-handle { font-size: 12px; color: var(--text3); }
+
+/* ═══════════════════════════════════════════════════
+   FAQ — SMOOTH ACCORDION
+   ═══════════════════════════════════════════════════ */
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-question {
+  padding: 24px 0; cursor: pointer; display: flex; justify-content: space-between;
+  align-items: center; font-size: 16px; font-weight: 600;
+  transition: color 0.3s;
+}
+.faq-question:hover { color: var(--accent2); }
+.faq-arrow {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--surface2); display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--text3); transition: transform 0.4s var(--spring), background 0.3s;
+}
+.faq-item.open .faq-arrow { transform: rotate(135deg); background: var(--accent); color: white; }
+.faq-answer {
+  display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.5s var(--ease);
+}
+.faq-item.open .faq-answer { grid-template-rows: 1fr; }
+.faq-answer-inner { overflow: hidden; }
+.faq-answer p { padding: 0 0 24px; font-size: 14px; color: var(--text2); line-height: 1.8; }
+
+/* ═══════════════════════════════════════════════════
+   CTA — ORBITING ELEMENTS
+   ═══════════════════════════════════════════════════ */
+.cta-section {
+  text-align: center; padding: 140px 48px; position: relative; overflow: hidden;
+}
+.cta-orbs {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.cta-orb {
+  position: absolute; width: 12px; height: 12px; border-radius: 50%;
+  top: 50%; left: 50%;
+}
+.cta-orb:nth-child(1) { background: var(--accent); animation: orbitSlow 20s linear infinite; }
+.cta-orb:nth-child(2) { background: var(--purple); animation: orbitSlow 25s linear infinite reverse; }
+.cta-orb:nth-child(3) { background: var(--green); animation: orbitSlow 30s linear infinite; animation-delay: -10s; }
+.cta-glow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.12), transparent 70%);
+  filter: blur(60px); pointer-events: none;
+  animation: morphBlob 15s ease-in-out infinite;
+}
+.cta-section h2 {
+  font-size: 44px; font-weight: 800; letter-spacing: -2px; margin-bottom: 16px;
+  position: relative; z-index: 2;
+}
+.cta-section p {
+  font-size: 17px; color: var(--text2); margin-bottom: 36px;
+  position: relative; z-index: 2;
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════ */
+.footer {
+  position: relative; z-index: 2; padding: 60px 48px 32px;
+  border-top: 1px solid var(--border);
+}
+.footer-grid {
+  display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 48px;
+  max-width: 1200px; margin: 0 auto 48px;
+}
+.footer-brand { max-width: 280px; }
+.footer-brand .nav-logo { margin-bottom: 12px; }
+.footer-brand p { font-size: 13px; color: var(--text3); line-height: 1.7; }
+.footer-col h4 {
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  color: var(--text2); margin-bottom: 16px;
+}
+.footer-col a {
+  display: block; font-size: 13px; color: var(--text3); padding: 4px 0;
+  transition: color 0.3s, transform 0.3s;
+}
+.footer-col a:hover { color: var(--text); transform: translateX(4px); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 24px; border-top: 1px solid var(--border);
+  max-width: 1200px; margin: 0 auto;
+  font-size: 12px; color: var(--text3);
+}
+
+/* ═══════════════════════════════════════════════════
+   MODAL
+   ═══════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(12px);
+  display: none; align-items: center; justify-content: center;
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 24px; padding: 40px; width: 440px; max-width: 90vw;
+  animation: scaleIn 0.4s var(--spring); position: relative;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px; background: var(--surface2); border: none;
+  color: var(--text3); font-size: 20px; cursor: pointer; width: 32px; height: 32px;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+}
+.modal-close:hover { color: var(--text); background: var(--surface3); transform: rotate(90deg); }
+.modal h2 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+.modal p { font-size: 14px; color: var(--text2); margin-bottom: 24px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+.form-group input {
+  width: 100%; padding: 13px 16px; border-radius: var(--radius-sm);
+  background: var(--bg2); border: 1.5px solid var(--border2); color: var(--text);
+  font-family: var(--font); font-size: 14px; transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+}
+.form-group input::placeholder { color: var(--text3); }
+.form-divider {
+  display: flex; align-items: center; gap: 12px; margin: 20px 0;
+  font-size: 12px; color: var(--text3);
+}
+.form-divider::before, .form-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.modal .btn { width: 100%; margin-top: 8px; }
+.modal-plan {
+  background: var(--bg2); border-radius: var(--radius-sm); padding: 16px;
+  margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;
+}
+.modal-plan .plan-name { font-size: 15px; font-weight: 700; }
+.modal-plan .plan-price { font-size: 15px; font-weight: 700; color: var(--accent2); font-family: var(--mono); }
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .hero-floaters { display: none; }
+}
+@media (max-width: 900px) {
+  .navbar { padding: 0 24px; }
+  .nav-links { display: none; }
+  section, .hero, .cta-section, .footer, .stats-section { padding-left: 24px; padding-right: 24px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .features-grid, .steps-grid { grid-template-columns: 1fr; }
+  .perf-layout { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .steps-line { display: none; }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: 36px; letter-spacing: -1px; }
+  .stat-value { font-size: 36px; }
+  .section-title { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+  <div class="preloader-logo"><svg width="28" height="28" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="10" x2="9" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="40" y1="10" x2="71" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="46" x2="58" y2="46" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/></svg></div>
+  <div class="preloader-bar"><div class="preloader-fill"></div></div>
+</div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- Particles -->
+<canvas id="particles"></canvas>
+<div class="grid-bg"></div>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-logo" onclick="goToHomepage()" style="cursor:pointer;">
+    <div class="logo-icon"><svg width="18" height="18" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="10" x2="9" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="40" y1="10" x2="71" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="46" x2="58" y2="46" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/></svg></div>
+    Axion
+  </div>
+  <div class="nav-links">
+    <a href="#features" onclick="navTo(event,'#features')">Strategies</a>
+    <a href="#performance" onclick="navTo(event,'#performance')">Performance</a>
+    <a href="#pricing" onclick="navTo(event,'#pricing')">Pricing</a>
+    <a href="#faq" onclick="navTo(event,'#faq')">FAQ</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="openModal('login')" id="nav-login-btn">Log In</button>
+    <button class="btn btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" id="nav-signup-btn">Get Started</button>
+    <div id="nav-user-menu" style="display:none;align-items:center;gap:12px;">
+      <button class="btn btn-primary btn-sm" onclick="showUserDashboard()">Dashboard</button>
+      <button class="btn btn-ghost btn-sm" onclick="logoutUser()">Log Out</button>
+    </div>
+  </div>
+</nav>
+
+<div id="marketing-site">
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <!-- Animated chart line background -->
+  <svg class="hero-chart-bg" viewBox="0 0 1200 400" preserveAspectRatio="none" fill="none">
+    <defs>
+      <linearGradient id="chartGrad" x1="0" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="rgba(59,130,246,0)"/>
+        <stop offset="30%" stop-color="rgba(59,130,246,0.15)"/>
+        <stop offset="70%" stop-color="rgba(16,185,129,0.15)"/>
+        <stop offset="100%" stop-color="rgba(16,185,129,0)"/>
+      </linearGradient>
+      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="400" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="rgba(16,185,129,0.06)"/>
+        <stop offset="100%" stop-color="rgba(16,185,129,0)"/>
+      </linearGradient>
+    </defs>
+    <path class="hero-chart-fill" d="M0,350 C100,340 150,320 250,280 C350,240 400,300 500,250 C600,200 650,220 750,160 C850,100 950,130 1050,80 C1100,55 1150,60 1200,40 L1200,400 L0,400 Z" fill="url(#chartFill)"/>
+    <path class="hero-chart-line" d="M0,350 C100,340 150,320 250,280 C350,240 400,300 500,250 C600,200 650,220 750,160 C850,100 950,130 1050,80 C1100,55 1150,60 1200,40" stroke="url(#chartGrad)" stroke-width="2"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-badge"><span class="live-dot"></span> Live signals active now</div>
+    <h1 id="hero-typed"></h1>
+    <p style="font-size:19px;color:var(--text2);line-height:1.7;margin-bottom:40px;max-width:560px;opacity:0;" id="hero-sub">AI-powered signals from the world's top traders. Real-time entries with stop losses and targets. Connect your exchange and let it trade for you.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary btn-large" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      <button class="btn btn-secondary btn-large" onclick="document.getElementById('performance').scrollIntoView({behavior:'smooth'})">View Performance</button>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Plans from $29/mo
+      </div>
+      <div class="hero-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Coinbase, Kraken & Binance
+      </div>
+      <div class="hero-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Cancel anytime
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating data badges -->
+  <div class="hero-floaters">
+    <div class="hero-float hf-1 float-anim-1"><span style="color:var(--text3)">Win Rate</span> <span class="val" style="margin-left:8px;font-size:18px;">82.6%</span></div>
+    <div class="hero-float hf-2 float-anim-2"><span style="color:var(--text3)">Avg Profit</span> <span class="val" style="margin-left:8px;font-size:18px;">$1,247</span></div>
+    <div class="hero-float hf-3 float-anim-3"><span style="color:var(--text3)">Signals Today</span> <span class="val" style="margin-left:8px;font-size:18px;">14</span></div>
+  </div>
+
+  <!-- Live trade panel -->
+  <div class="hero-right">
+    <div class="live-panel">
+      <div class="live-panel-header">
+        <div class="live-panel-title"><span class="dot"></span> Recent Trades</div>
+        <div class="live-panel-badge">82% Win Rate</div>
+      </div>
+      <div class="trade-feed" id="trade-feed"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TICKER ═══════════ -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
+
+<!-- ═══════════ STATS ═══════════ -->
+<div class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card anim">
+      <div class="stat-value green" data-target="82" data-suffix="%">0%</div>
+      <div class="stat-label">Win Rate (30d)</div>
+    </div>
+    <div class="stat-card anim d1">
+      <div class="stat-value accent" data-target="18420" data-prefix="$">$0</div>
+      <div class="stat-label">Avg Monthly Profit</div>
+    </div>
+    <div class="stat-card anim d2">
+      <div class="stat-value purple" data-target="280" data-suffix="+">0</div>
+      <div class="stat-label">Active Traders</div>
+    </div>
+    <div class="stat-card anim d3">
+      <div class="stat-value gold" data-target="156420" id="signals-counter">0</div>
+      <div class="stat-label">Signals Delivered</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FEATURES ═══════════ -->
+<section id="features">
+  <div class="container">
+    <div class="section-label anim"><span class="line"></span> STRATEGIES</div>
+    <div class="section-title anim">Four elite strategies.<br>One powerful platform.</div>
+    <div class="section-subtitle anim">Each strategy is reverse-engineered from a world-class trader's methodology, then automated with real-time market data.</div>
+    <div class="features-grid">
+      <div class="feature-card card-glow anim tilt-card" data-tilt>
+        <div class="feature-card-inner">
+          <div class="feature-icon" style="background:rgba(59,130,246,0.1);color:var(--accent2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+          <h3>Fibonacci Retracement</h3>
+          <div class="trader">Golden Ratio Pullback Strategy</div>
+          <p>Fibonacci retracement entries at key pullback levels in trending markets. Waits for price to pull back to the golden ratio before entering with trend.</p>
+          <div class="feature-stats">
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">76%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.2:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">15m-1H</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card card-glow anim d1 tilt-card" data-tilt>
+        <div class="feature-card-inner">
+          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="4" height="16"/><rect x="10" y="8" width="4" height="12"/><rect x="18" y="2" width="4" height="18"/></svg></div>
+          <h3>Nison Candlesticks</h3>
+          <div class="trader">Steve Nison (Japanese Candlestick Charting)</div>
+          <p>Steve Nison's candlestick pattern recognition &mdash; bullish engulfing, hammers, and reversal patterns at key support/resistance levels.</p>
+          <div class="feature-stats">
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">74%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">2.8:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">5m-1H</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card card-glow anim d2 tilt-card" data-tilt>
+        <div class="feature-card-inner">
+          <div class="feature-icon" style="background:rgba(16,185,129,0.1);color:var(--green2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <h3>MACD Divergence</h3>
+          <div class="trader">Momentum Divergence Strategy</div>
+          <p>Detects momentum shifts when MACD histogram diverges from price. Catches trend reversals early with high reward-to-risk entries.</p>
+          <div class="feature-stats">
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">72%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.5:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">15m-4H</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="feature-card card-glow anim d3 tilt-card" data-tilt>
+        <div class="feature-card-inner">
+          <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:var(--gold);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h3>Wyckoff Spring</h3>
+          <div class="trader">Richard Wyckoff (Accumulation Breakout)</div>
+          <p>Richard Wyckoff's accumulation breakout method. Identifies low-volatility compression zones and trades the expansion breakout.</p>
+          <div class="feature-stats">
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">68%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">4.2:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">1H-4H</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HOW IT WORKS ═══════════ -->
+<section id="how-it-works" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-label anim" style="justify-content:center;"><span class="line"></span> HOW IT WORKS</div>
+      <div class="section-title anim">Up and running in 3 minutes.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 56px;">No coding. No complex setup. Just connect and start receiving signals.</div>
+    </div>
+    <div class="steps-container">
+      <div class="steps-line anim" id="steps-line"></div>
+      <div class="steps-grid">
+        <div class="step-card anim">
+          <div class="step-number">1</div>
+          <h3>Create Your Account</h3>
+          <p>Sign up in 30 seconds. Pick the strategies that match your style. Choose a plan and start receiving signals instantly.</p>
+        </div>
+        <div class="step-card anim d2">
+          <div class="step-number">2</div>
+          <h3>Connect Your Exchange</h3>
+          <p>Link your Coinbase, Kraken, or Binance account with read-only API keys. Funds stay on your exchange &mdash; always in your control.</p>
+        </div>
+        <div class="step-card anim d4">
+          <div class="step-number">3</div>
+          <h3>Trade or Auto-Execute</h3>
+          <p>Get real-time alerts with entry, SL, and targets. Accept manually or enable auto-execution to trade hands-free.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PERFORMANCE ═══════════ -->
+<section id="performance">
+  <div class="container">
+    <div class="section-label anim"><span class="line"></span> PERFORMANCE</div>
+    <div class="section-title anim">Numbers that speak<br>for themselves.</div>
+    <div class="section-subtitle anim">Verified track record. Every signal logged, every trade recorded. Starting capital: $10,000.</div>
+    <div class="perf-layout">
+      <div class="perf-chart-container anim from-left">
+        <div class="perf-chart-header">
+          <h3>Equity Curve (12 Months)</h3>
+          <div class="perf-total" id="equity-total">+$217,840</div>
+        </div>
+        <canvas id="equity-chart" class="chart-canvas"></canvas>
+      </div>
+      <div class="monthly-grid anim from-right d2" id="monthly-returns"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TESTIMONIALS ═══════════ -->
+<section id="testimonials" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding-left:0;padding-right:0;">
+  <div class="container" style="padding:0 48px;">
+    <div style="text-align:center;">
+      <div class="section-label anim" style="justify-content:center;"><span class="line"></span> TESTIMONIALS</div>
+      <div class="section-title anim">Trusted by thousands.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 48px;">Real feedback from real users who trade with Axion every day.</div>
+    </div>
+  </div>
+  <div class="testimonials-track-container">
+    <div class="testimonials-track" id="testimonials-track"></div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section id="pricing">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-label anim" style="justify-content:center;"><span class="line"></span> PRICING</div>
+      <div class="section-title anim">One signal can pay for a year.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 20px;">Start free. Upgrade when you're ready. Every plan includes all 4 strategies.</div>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card anim tilt-card" data-tilt>
+        <div class="price-tier">Monthly</div>
+        <div class="price-amount"><span class="currency">$</span><span class="value">49</span><span class="period">/month</span></div>
+        <div class="price-desc">Full access to all strategies and signals.</div>
+        <ul class="price-features">
+          <li><span class="check">&#10003;</span> All 4 trading strategies</li>
+          <li><span class="check">&#10003;</span> Real-time signal alerts</li>
+          <li><span class="check">&#10003;</span> Coinbase, Kraken & Binance</li>
+          <li><span class="check">&#10003;</span> Signal history & analytics</li>
+          <li><span class="check">&#10003;</span> Email & chat support</li>
+        </ul>
+        <button class="btn btn-secondary" onclick="redirectToCheckout('monthly')">Subscribe</button>
+      </div>
+      <div class="price-card popular anim d1 tilt-card" data-tilt>
+        <div class="price-tier">Pro Annual <span class="price-save">Save 38%</span></div>
+        <div class="price-amount"><span class="currency">$</span><span class="value">29</span><span class="period">/mo, billed yearly</span></div>
+        <div class="price-desc">Everything in Monthly plus auto-execution.</div>
+        <ul class="price-features">
+          <li><span class="check">&#10003;</span> Everything in Monthly</li>
+          <li><span class="check">&#10003;</span> Auto-execution engine</li>
+          <li><span class="check">&#10003;</span> Portfolio risk management</li>
+          <li><span class="check">&#10003;</span> Custom strategy tuning</li>
+          <li><span class="check">&#10003;</span> Priority support (&lt; 1hr)</li>
+        </ul>
+        <button class="btn btn-primary" onclick="redirectToCheckout('annual')">Subscribe</button>
+      </div>
+      <div class="price-card anim d2 tilt-card" data-tilt>
+        <div class="price-tier">Lifetime</div>
+        <div class="price-amount"><span class="currency">$</span><span class="value">799</span><span class="period">one-time</span></div>
+        <div class="price-desc">Pay once, use forever. Lock in before prices go up.</div>
+        <ul class="price-features">
+          <li><span class="check">&#10003;</span> Everything in Pro</li>
+          <li><span class="check">&#10003;</span> Lifetime updates</li>
+          <li><span class="check">&#10003;</span> Early access: new strategies</li>
+          <li><span class="check">&#10003;</span> 1-on-1 onboarding call</li>
+          <li><span class="check">&#10003;</span> Founder's early access</li>
+        </ul>
+        <button class="btn btn-green" onclick="redirectToCheckout('lifetime')">Buy Lifetime Access</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section id="faq">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="section-label anim" style="justify-content:center;"><span class="line"></span> FAQ</div>
+      <div class="section-title anim">Common questions.</div>
+    </div>
+    <div class="faq-list" style="margin-top:48px;">
+      <div class="faq-item anim"><div class="faq-question" onclick="toggleFaq(this)">How does Axion generate signals?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Axion runs four independent trading strategies modeled after renowned traders' methodologies. It analyzes real-time BTC price data across multiple timeframes, computes technical indicators (EMA, RSI, VWAP, Bollinger Bands, ATR), detects institutional structures (order blocks, fair value gaps), and generates signals with precise entry, stop loss, and take profit levels.</p></div></div></div>
+      <div class="faq-item anim d1"><div class="faq-question" onclick="toggleFaq(this)">Is my money safe?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We never hold your funds. Your capital stays on your exchange (Coinbase, Kraken, or Binance) at all times. You connect via API keys with trade-only permissions &mdash; we cannot withdraw funds. You can revoke access at any time.</p></div></div></div>
+      <div class="faq-item anim d2"><div class="faq-question" onclick="toggleFaq(this)">What exchanges are supported?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We support Coinbase, Kraken, and Binance &mdash; the three largest regulated exchanges. More exchanges including Bybit and KuCoin are on the roadmap.</p></div></div></div>
+      <div class="faq-item anim d3"><div class="faq-question" onclick="toggleFaq(this)">Can I use it without auto-trading?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Absolutely. Many users receive signals and execute manually. Each signal comes with entry, SL, and TP targets. Auto-execution is optional on Pro plans.</p></div></div></div>
+      <div class="faq-item anim d4"><div class="faq-question" onclick="toggleFaq(this)">What's the minimum account size?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>No minimum, but we recommend $500+. Default risk is 1% per trade, so $500 risks $5 per signal.</p></div></div></div>
+      <div class="faq-item anim d5"><div class="faq-question" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Monthly and annual plans can be cancelled anytime — you keep access until the end of your billing period. Lifetime access is permanent and non-refundable.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CTA ═══════════ -->
+<div class="cta-section">
+  <div class="cta-orbs"><div class="cta-orb"></div><div class="cta-orb"></div><div class="cta-orb"></div></div>
+  <div class="cta-glow"></div>
+  <h2 class="anim">Ready to trade smarter?</h2>
+  <p class="anim d1">Join 280+ traders using Axion to generate consistent profits.</p>
+  <div style="position:relative;z-index:2;" class="anim d2">
+    <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Get Started Now</button>
+  </div>
+</div>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo"><div class="logo-icon"><svg width="18" height="18" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="10" x2="9" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="40" y1="10" x2="71" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="46" x2="58" y2="46" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/></svg></div> Axion</div>
+      <p>AI-powered Bitcoin trading signals built on strategies from the world's top traders.</p>
+    </div>
+    <div class="footer-col"><h4>Product</h4><a href="#features">Strategies</a><a href="#performance">Performance</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div>
+    <div class="footer-col"><h4>Legal</h4><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Risk Disclosure</a><a href="#">Refund Policy</a></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Axion. All rights reserved.</span>
+    <span>Trading involves risk. Past performance does not guarantee future results.</span>
+  </div>
+</footer>
+
+</div><!-- /marketing-site -->
+
+<!-- ═══════════ USER DASHBOARD (shown when logged in) ═══════════ -->
+<div id="user-dashboard" style="display:none;">
+  <div style="position:relative;z-index:2;min-height:100vh;padding:100px 48px 60px;">
+    <div class="container">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;">
+        <div>
+          <div style="font-size:14px;color:var(--text3);margin-bottom:4px;">Welcome back,</div>
+          <div style="font-size:32px;font-weight:800;letter-spacing:-1px;" id="dash-username">Trader</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Account Status</div>
+          <span id="dash-plan-badge" style="display:inline-block;padding:6px 16px;border-radius:100px;font-size:12px;font-weight:700;background:rgba(16,185,129,0.1);color:var(--green2);border:1px solid rgba(16,185,129,0.15);">Active</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:32px;">
+        <div style="background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(139,92,246,0.05));border:1px solid rgba(59,130,246,0.15);border-radius:20px;padding:32px;text-align:center;cursor:pointer;transition:all .3s;" onclick="window.open('http://localhost:8080','_blank')" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="width:56px;height:56px;border-radius:14px;background:#0D0F16;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <svg width="24" height="24" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="10" x2="9" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="40" y1="10" x2="71" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="46" x2="58" y2="46" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/></svg>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px;">Launch Trading App</div>
+          <div style="font-size:12px;color:var(--text3);">Open the signal dashboard</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:32px;text-align:center;cursor:pointer;transition:all .3s;" onclick="showDashSection('account')" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="width:56px;height:56px;border-radius:16px;background:var(--surface2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px;">Account Settings</div>
+          <div style="font-size:12px;color:var(--text3);">Profile, API keys, preferences</div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:32px;text-align:center;cursor:pointer;transition:all .3s;" onclick="showDashSection('billing')" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="width:56px;height:56px;border-radius:16px;background:var(--surface2);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:4px;">Billing & Plan</div>
+          <div style="font-size:12px;color:var(--text3);">Manage subscription</div>
+        </div>
+      </div>
+
+      <!-- Dashboard Sections -->
+      <div id="dash-section-overview">
+        <!-- Stats -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px;">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Current Plan</div>
+            <div style="font-size:20px;font-weight:800;font-family:var(--mono);" id="dash-plan-name">Pro Annual</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Member Since</div>
+            <div style="font-size:20px;font-weight:800;font-family:var(--mono);" id="dash-member-since">--</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Signals This Month</div>
+            <div style="font-size:20px;font-weight:800;color:var(--accent2);font-family:var(--mono);">47</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Win Rate</div>
+            <div style="font-size:20px;font-weight:800;color:var(--green2);font-family:var(--mono);">82%</div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;">Recent Activity</div>
+          <div id="dash-activity" style="font-size:13px;color:var(--text2);line-height:2.2;"></div>
+        </div>
+      </div>
+
+      <!-- Account Settings Section (hidden by default) -->
+      <div id="dash-section-account" style="display:none;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;cursor:pointer;" onclick="showDashSection('overview')">
+          <span style="font-size:14px;color:var(--accent2);">&larr; Back</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;">
+            <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Profile</div>
+            <div class="form-group"><label>Full Name</label><input type="text" id="acc-name" placeholder="Your name"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="acc-email" placeholder="you@example.com" disabled style="opacity:0.5;"></div>
+            <button class="btn btn-primary" onclick="saveAccount()">Save Changes</button>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;">
+            <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Exchange API Keys</div>
+            <div class="form-group"><label>Exchange</label>
+              <select style="width:100%;padding:12px 16px;border-radius:10px;background:var(--bg2);border:1.5px solid var(--border2);color:var(--text);font-family:var(--font);font-size:14px;" id="acc-exchange">
+                <option value="coinbase">Coinbase</option><option value="binance">Binance</option><option value="kraken">Kraken</option>
+              </select>
+            </div>
+            <div class="form-group"><label>API Key</label><input type="text" id="acc-api-key" placeholder="Enter API key"></div>
+            <div class="form-group"><label>API Secret</label><input type="password" id="acc-api-secret" placeholder="Enter API secret"></div>
+            <button class="btn btn-primary" onclick="saveExchangeKeys()">Save Keys</button>
+            <div style="margin-top:14px;padding:12px;background:var(--bg2);border-radius:10px;font-size:11px;color:var(--text3);line-height:1.6;border:1px solid var(--border);">Keys are encrypted and stored locally. We never have access to your funds.</div>
+          </div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;margin-top:24px;">
+          <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Password</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+            <div class="form-group"><label>Current Password</label><input type="password" id="pw-current" placeholder="Current password"></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="pw-new" placeholder="New password"></div>
+            <div class="form-group"><label>Confirm New</label><input type="password" id="pw-confirm" placeholder="Confirm new password"></div>
+          </div>
+          <div id="pw-error" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:8px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);color:var(--red2);font-size:13px;"></div>
+          <div id="pw-success" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:8px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);color:var(--green2);font-size:13px;"></div>
+          <button class="btn btn-secondary" onclick="updatePassword()">Update Password</button>
+        </div>
+      </div>
+
+      <!-- Billing Section -->
+      <div id="dash-section-billing" style="display:none;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;cursor:pointer;" onclick="showDashSection('overview')">
+          <span style="font-size:14px;color:var(--accent2);">&larr; Back</span>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;max-width:540px;">
+          <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Current Plan</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:20px;background:linear-gradient(135deg,rgba(59,130,246,0.06),rgba(139,92,246,0.04));border:1px solid rgba(59,130,246,0.15);border-radius:14px;margin-bottom:28px;">
+            <div>
+              <div style="font-size:18px;font-weight:800;" id="billing-plan-name">Pro Annual</div>
+              <div style="font-size:13px;color:var(--text3);" id="billing-plan-price">$29/mo, billed yearly</div>
+            </div>
+            <span id="billing-status-badge" style="padding:5px 14px;border-radius:100px;font-size:11px;font-weight:700;background:rgba(16,185,129,0.1);color:var(--green2);border:1px solid rgba(16,185,129,0.15);">Active</span>
+          </div>
+          <div style="padding:20px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:12px;margin-bottom:24px;">
+            <div style="font-size:13px;color:var(--text2);line-height:1.6;">Manage your subscription, update your payment method, download invoices, or cancel — all from the Stripe billing portal.</div>
+          </div>
+          <button class="btn btn-primary" onclick="openBillingPortal()" style="width:100%;margin-bottom:10px;">Manage Billing &amp; Subscription</button>
+          <div style="font-size:11px;color:var(--text3);text-align:center;">Opens Stripe's secure billing portal in a new tab</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MODALS ═══════════ -->
+<div class="modal-overlay" id="modal-signup">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signup')">&times;</button>
+    <h2>Create Your Account</h2>
+    <p>Create your account and choose a plan to start trading.</p>
+    <div class="modal-plan" id="modal-plan" style="display:none;">
+      <span class="plan-name" id="modal-plan-name"></span>
+      <span class="plan-price" id="modal-plan-price"></span>
+    </div>
+    <form onsubmit="handleSignup(event)">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="John Doe" required></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Min 8 characters" minlength="8" required></div>
+      <button type="submit" class="btn btn-primary btn-large">Create Account</button>
+    </form>
+    <div class="form-divider">or</div>
+    <button class="btn btn-secondary" style="width:100%;">Continue with Google</button>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:16px;">By signing up, you agree to our Terms of Service and Privacy Policy.</p>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-login">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('login')">&times;</button>
+    <h2>Welcome Back</h2>
+    <p>Log in to your Axion account.</p>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Your password" required></div>
+      <button type="submit" class="btn btn-primary btn-large">Log In</button>
+    </form>
+    <p style="text-align:center;margin-top:16px;"><a href="#" style="font-size:13px;">Forgot your password?</a></p>
+    <div class="form-divider">or</div>
+    <button class="btn btn-secondary" style="width:100%;">Continue with Google</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   STRIPE PAYMENT LINKS — paste your links here
+   ═══════════════════════════════════════════════════ */
+const STRIPE_LINKS = {
+  monthly:  'https://buy.stripe.com/3cIeVe1AsbjHfxC58pfnO02',
+  annual:   'https://buy.stripe.com/3cI6oIa6Y4Vj2KQ0S9fnO01',
+  lifetime: 'https://buy.stripe.com/7sYfZicf6evT7168kBfnO00',
+};
+
+const STRIPE_PORTAL = 'https://billing.stripe.com/p/login/7sYfZicf6evT7168kBfnO00';
+
+function openBillingPortal() {
+  if (!STRIPE_PORTAL || STRIPE_PORTAL.startsWith('PASTE_')) {
+    alert('Billing portal not configured yet.');
+    return;
+  }
+  window.open(STRIPE_PORTAL, '_blank');
+}
+
+function redirectToCheckout(plan) {
+  const url = STRIPE_LINKS[plan];
+  if (!url || url.startsWith('PASTE_')) {
+    alert('Payment links not configured yet. Check back soon!');
+    return;
+  }
+  window.location.href = url;
+}
+
+/* ═══════════════════════════════════════════════════
+   PRELOADER + HERO TYPING
+   ═══════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  checkAuth();
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+    setTimeout(startHeroTyping, 300);
+  }, 1200);
+});
+
+function startHeroTyping() {
+  const el = document.getElementById('hero-typed');
+  const lines = [
+    { text: 'Trade Bitcoin like', gradient: false },
+    { text: 'the pros do.', gradient: true },
+  ];
+
+  let lineIdx = 0, charIdx = 0;
+  let currentTarget = el;
+  const speed = 35;
+  const lineDelay = 80;
+
+  const cursor = document.createElement('span');
+  cursor.className = 'typed-cursor';
+  el.appendChild(cursor);
+
+  function typeNext() {
+    if (lineIdx >= lines.length) {
+      setTimeout(() => {
+        const sub = document.getElementById('hero-sub');
+        sub.style.animation = 'fadeInUp 0.8s var(--ease) forwards';
+        document.querySelector('.hero-actions').classList.add('go');
+        document.querySelector('.hero-trust').classList.add('go');
+      }, 200);
+      setTimeout(() => { cursor.style.animation = 'none'; cursor.style.opacity = '0'; cursor.style.transition = 'opacity 1s'; }, 2500);
+      return;
+    }
+
+    const line = lines[lineIdx];
+
+    // New line — add <br> and gradient wrapper if needed
+    if (charIdx === 0) {
+      if (lineIdx > 0) el.insertBefore(document.createElement('br'), cursor);
+      if (line.gradient) {
+        const wrap = document.createElement('span');
+        wrap.className = 'gradient-wrap';
+        el.insertBefore(wrap, cursor);
+        currentTarget = wrap;
+      } else {
+        currentTarget = el;
+      }
+    }
+
+    if (charIdx < line.text.length) {
+      // Insert character as text node directly (no span wrappers)
+      if (currentTarget === el) {
+        // Insert text node before cursor
+        const tn = document.createTextNode(line.text[charIdx]);
+        el.insertBefore(tn, cursor);
+      } else {
+        currentTarget.textContent += line.text[charIdx];
+      }
+      charIdx++;
+      setTimeout(typeNext, speed);
+    } else {
+      lineIdx++; charIdx = 0;
+      currentTarget = el;
+      setTimeout(typeNext, lineDelay);
+    }
+  }
+
+  typeNext();
+}
+
+/* ═══════════════════════════════════════════════════
+   RIPPLE BUTTONS
+   ═══════════════════════════════════════════════════ */
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
+
+/* ═══════════════════════════════════════════════════
+   SCROLL PROGRESS BAR
+   ═══════════════════════════════════════════════════ */
+const progBar = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  progBar.style.width = (window.scrollY / h * 100) + '%';
+  // Navbar shrink
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL
+   ═══════════════════════════════════════════════════ */
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('vis');
+      const sv = e.target.querySelector('.stat-value[data-target]');
+      if (sv) animCounter(sv);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.anim').forEach(el => obs.observe(el));
+
+function animCounter(el) {
+  if (el.dataset.done) return; el.dataset.done = '1';
+  const target = +el.dataset.target, prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+  const start = performance.now(), dur = 2200;
+  (function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 4);
+    el.textContent = prefix + Math.round(target * ease).toLocaleString() + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  })(start);
+}
+
+/* ═══════════════════════════════════════════════════
+   3D CARD TILT
+   ═══════════════════════════════════════════════════ */
+document.querySelectorAll('.tilt-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(800px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg) translateY(-6px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform 0.6s var(--ease)';
+    setTimeout(() => card.style.transition = '', 600);
+  });
+  card.addEventListener('mouseenter', () => { card.style.transition = 'none'; });
+});
+
+/* ═══════════════════════════════════════════════════
+   PARTICLES
+   ═══════════════════════════════════════════════════ */
+const cvs = document.getElementById('particles');
+const ctx = cvs.getContext('2d');
+let W, H, particles = [];
+
+function resizeCvs() {
+  W = cvs.width = window.innerWidth;
+  H = cvs.height = window.innerHeight;
+}
+resizeCvs();
+window.addEventListener('resize', resizeCvs);
+
+for (let i = 0; i < 80; i++) {
+  particles.push({
+    x: Math.random() * W, y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.5 + 0.5,
+    o: Math.random() * 0.3 + 0.1,
+  });
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  for (const p of particles) {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(96,165,250,${p.o})`; ctx.fill();
+  }
+  // Draw lines between close particles
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(96,165,250,${0.06 * (1 - dist / 120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// Mouse interaction with particles
+document.addEventListener('mousemove', e => {
+  for (const p of particles) {
+    const dx = e.clientX - p.x, dy = e.clientY - p.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 150) {
+      p.vx -= dx * 0.0003;
+      p.vy -= dy * 0.0003;
+    }
+  }
+});
+
+/* ═══════════════════════════════════════════════════
+   TRADE FEED
+   ═══════════════════════════════════════════════════ */
+const strategies = ['Fibonacci Retracement', 'Nison Candlesticks', 'MACD Divergence', 'Wyckoff Spring'];
+const fakeTrades = [
+  { dir:'LONG', strat:'Fibonacci Retracement', pnl:+1842.50, time:'2 min ago' },
+  { dir:'SHORT', strat:'Wyckoff Spring', pnl:+726.30, time:'8 min ago' },
+  { dir:'LONG', strat:'MACD Divergence', pnl:+2105.80, time:'14 min ago' },
+  { dir:'LONG', strat:'Nison Candlesticks', pnl:+445.20, time:'21 min ago' },
+  { dir:'SHORT', strat:'Fibonacci Retracement', pnl:-312.40, time:'27 min ago' },
+  { dir:'LONG', strat:'Wyckoff Spring', pnl:+1567.90, time:'35 min ago' },
+  { dir:'LONG', strat:'MACD Divergence', pnl:+893.10, time:'42 min ago' },
+  { dir:'SHORT', strat:'Nison Candlesticks', pnl:+1204.60, time:'51 min ago' },
+  { dir:'LONG', strat:'Fibonacci Retracement', pnl:+3245.00, time:'1h ago' },
+  { dir:'SHORT', strat:'Wyckoff Spring', pnl:-187.50, time:'1h ago' },
+];
+
+function renderFeed() {
+  document.getElementById('trade-feed').innerHTML = fakeTrades.map((t, i) => `
+    <div class="trade-item${i === 0 ? ' new' : ''}">
+      <div class="trade-left">
+        <div class="trade-pair">BTC-USD <span class="trade-badge ${t.dir==='LONG'?'long':'short'}">${t.dir}</span></div>
+        <div class="trade-strategy">${t.strat}</div>
+      </div>
+      <div class="trade-right">
+        <div class="trade-pnl ${t.pnl>=0?'win':'loss'}">${t.pnl>=0?'+':''}$${Math.abs(t.pnl).toLocaleString(undefined,{minimumFractionDigits:2})}</div>
+        <div class="trade-time">${t.time}</div>
+      </div>
+    </div>`).join('');
+}
+
+function addTrade() {
+  const s = strategies[Math.floor(Math.random()*strategies.length)];
+  const d = Math.random()>0.3 ? 'LONG' : 'SHORT';
+  const w = Math.random() < 0.82;
+  const pnl = w ? +(200+Math.random()*3000).toFixed(2) : -(100+Math.random()*500).toFixed(2);
+  fakeTrades.unshift({ dir:d, strat:s, pnl, time:'just now' });
+  if (fakeTrades.length > 10) fakeTrades.pop();
+  fakeTrades.forEach((t,i) => { if(i>0 && t.time==='just now') t.time='1 min ago'; });
+  renderFeed();
+}
+renderFeed();
+setInterval(addTrade, 7000 + Math.random()*6000);
+
+/* ═══════════════════════════════════════════════════
+   TICKER
+   ═══════════════════════════════════════════════════ */
+const tickerData = [
+  {l:'BTC/USD',v:'$84,892',c:'+2.34%',d:'up'},{l:'30d Win Rate',v:'82.6%',c:'',d:'up'},
+  {l:'Signals Today',v:'17',c:'+5',d:'up'},{l:'Avg Profit',v:'$1,247',c:'+14.3%',d:'up'},
+  {l:'ETH/USD',v:'$1,623',c:'+1.87%',d:'up'},{l:'Active Traders',v:'280',c:'+6',d:'up'},
+  {l:'Volume',v:'$4.2M',c:'today',d:'up'},{l:'Win Streak',v:'23',c:'trades',d:'up'},
+];
+const tickHTML = tickerData.map(i=>`<div class="ticker-item"><span class="label">${i.l}</span><span class="value">${i.v}</span>${i.c?`<span class="change ${i.d}">${i.c}</span>`:''}</div>`).join('');
+document.getElementById('ticker-track').innerHTML = tickHTML + tickHTML;
+
+/* ═══════════════════════════════════════════════════
+   TESTIMONIALS — INFINITE MARQUEE
+   ═══════════════════════════════════════════════════ */
+const testimonials = [
+  {stars:5,text:"I've tried 6 different signal services. Axion is the first one where I'm consistently profitable. The Fibonacci Retracement strategy alone paid for a year's subscription in my first week.",name:"Marcus Chen",sub:"Trading since 2021"},
+  {stars:5,text:"The auto-execution feature is a game changer. I set it up on my Coinbase account and it trades while I sleep. Woke up to a $2,400 profit last Tuesday.",name:"Sarah Mitchell",sub:"Full-time trader"},
+  {stars:5,text:"As a software engineer, I appreciate how clean this tool is. Signal quality is excellent. My win rate went from 45% to 81% in a month.",name:"David Park",sub:"Engineer & Part-time trader"},
+  {stars:5,text:"The Wyckoff Spring strategy is insane for catching breakouts. Three signals yesterday, all winners. Best money I've spent on trading tools.",name:"Jake Rivera",sub:"Day trader, 3yr exp"},
+  {stars:5,text:"I was skeptical at first, but $4,200 profit in my first two weeks convinced me. Now I'm a lifetime member. Best investment I've made.",name:"Emily Watson",sub:"Crypto investor"},
+  {stars:4,text:"Solid signals with clear risk levels. The Nison Candlesticks strategy works beautifully on ranging days. Only wish they had more alt-coin coverage.",name:"Raj Patel",sub:"Swing trader"},
+];
+const tHTML = testimonials.map(t=>`
+  <div class="testimonial-card">
+    <div class="testimonial-stars">${'&#9733;'.repeat(t.stars)}${'&#9734;'.repeat(5-t.stars)}</div>
+    <div class="testimonial-text">"${t.text}"</div>
+    <div class="testimonial-author">
+      <div class="testimonial-avatar">${t.name[0]}</div>
+      <div><div class="testimonial-name">${t.name}</div><div class="testimonial-handle">${t.sub}</div></div>
+    </div>
+  </div>`).join('');
+document.getElementById('testimonials-track').innerHTML = tHTML + tHTML;
+
+/* ═══════════════════════════════════════════════════
+   EQUITY CHART — ANIMATED LINE DRAW
+   ═══════════════════════════════════════════════════ */
+let chartDrawn = false;
+const chartObs = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && !chartDrawn) { chartDrawn = true; drawChart(); }
+}, { threshold: 0.3 });
+const chartEl = document.getElementById('equity-chart');
+if (chartEl) chartObs.observe(chartEl);
+
+function drawChart() {
+  const canvas = document.getElementById('equity-chart');
+  if (!canvas) return;
+  const c = canvas.getContext('2d');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * 2; canvas.height = 280 * 2;
+  canvas.style.width = rect.width + 'px'; canvas.style.height = '280px';
+  c.scale(2, 2);
+  const W = rect.width, H = 280;
+
+  const pts = []; let eq = 10000;
+  for (let i = 0; i <= 365; i++) {
+    eq *= (1 + (Math.random() - 0.35) * 0.025);
+    eq = Math.max(eq, 8000); pts.push(eq);
+  }
+  const sc = 227840 / pts[pts.length-1];
+  pts.forEach((p,i) => pts[i] = p * sc);
+
+  const mn = Math.min(...pts)*0.95, mx2 = Math.max(...pts)*1.05;
+  const pad = {t:20,r:20,b:30,l:60};
+  const cW = W-pad.l-pad.r, cH = H-pad.t-pad.b;
+  const x = i => pad.l + (i/(pts.length-1))*cW;
+  const y = v => pad.t + (1-(v-mn)/(mx2-mn))*cH;
+
+  // Grid
+  c.strokeStyle = 'rgba(255,255,255,0.04)'; c.lineWidth = 1;
+  for (let i=0;i<5;i++){
+    const yy=pad.t+(cH/4)*i; c.beginPath();c.moveTo(pad.l,yy);c.lineTo(W-pad.r,yy);c.stroke();
+    c.fillStyle='rgba(255,255,255,0.25)';c.font='11px Inter';c.textAlign='right';
+    c.fillText('$'+Math.round(mx2-(mx2-mn)*(i/4)).toLocaleString(),pad.l-8,yy+4);
+  }
+  const months=['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+  c.textAlign='center';
+  months.forEach((m,i)=>c.fillText(m,pad.l+(i/11)*cW,H-8));
+
+  // Animate line drawing
+  let frame = 0; const totalFrames = 120;
+  function animFrame() {
+    frame++;
+    const progress = Math.min(frame / totalFrames, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const drawTo = Math.floor(eased * (pts.length - 1));
+
+    // Clear line area
+    c.clearRect(pad.l-1, pad.t-1, cW+2, cH+2);
+
+    // Gradient fill
+    const grad = c.createLinearGradient(0,pad.t,0,H);
+    grad.addColorStop(0,'rgba(16,185,129,0.15)'); grad.addColorStop(1,'rgba(16,185,129,0)');
+    c.beginPath(); c.moveTo(x(0),H-pad.b);
+    for(let i=0;i<=drawTo;i++) c.lineTo(x(i),y(pts[i]));
+    c.lineTo(x(drawTo),H-pad.b); c.closePath(); c.fillStyle=grad; c.fill();
+
+    // Line
+    c.beginPath();
+    for(let i=0;i<=drawTo;i++) i===0?c.moveTo(x(i),y(pts[i])):c.lineTo(x(i),y(pts[i]));
+    c.strokeStyle='#10B981'; c.lineWidth=2.5; c.lineJoin='round'; c.lineCap='round'; c.stroke();
+
+    // Dot
+    if (drawTo > 0) {
+      const lx=x(drawTo),ly=y(pts[drawTo]);
+      c.beginPath();c.arc(lx,ly,4,0,Math.PI*2);c.fillStyle='#10B981';c.fill();
+      c.beginPath();c.arc(lx,ly,10,0,Math.PI*2);c.strokeStyle='rgba(16,185,129,0.3)';c.lineWidth=2;c.stroke();
+    }
+
+    if (progress < 1) requestAnimationFrame(animFrame);
+  }
+  requestAnimationFrame(animFrame);
+}
+
+// Monthly returns
+const monthData = [
+  {m:'Apr 2026',r:'+24.7%',t:158},{m:'Mar 2026',r:'+31.2%',t:172},{m:'Feb 2026',r:'+19.4%',t:141},
+  {m:'Jan 2026',r:'+16.8%',t:149},{m:'Dec 2025',r:'+35.3%',t:183},{m:'Nov 2025',r:'-2.8%',t:126},
+  {m:'Oct 2025',r:'+26.1%',t:165},{m:'Sep 2025',r:'+12.6%',t:132},{m:'Aug 2025',r:'+21.3%',t:154},
+  {m:'Jul 2025',r:'+28.9%',t:171},{m:'Jun 2025',r:'+4.7%',t:118},{m:'May 2025',r:'+22.5%',t:160},
+];
+document.getElementById('monthly-returns').innerHTML = monthData.map(d=>`
+  <div class="month-card"><div><div class="month-name">${d.m}</div><div class="month-trades">${d.t} trades</div></div>
+  <div class="month-return ${d.r[0]==='+'?'up':'down'}">${d.r}</div></div>`).join('');
+
+window.addEventListener('resize', () => { if(chartDrawn) drawChart(); });
+
+/* ═══════════════════════════════════════════════════
+   FAQ
+   ═══════════════════════════════════════════════════ */
+function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+
+/* ═══════════════════════════════════════════════════
+   MODALS
+   ═══════════════════════════════════════════════════ */
+function openModal(type, plan) {
+  if (type === 'signup') {
+    document.getElementById('modal-signup').classList.add('active');
+    if (plan) {
+      const p = plan.split(' — ');
+      document.getElementById('modal-plan').style.display = 'flex';
+      document.getElementById('modal-plan-name').textContent = p[0];
+      document.getElementById('modal-plan-price').textContent = p[1] || '';
+    } else {
+      document.getElementById('modal-plan').style.display = 'none';
+    }
+  } else {
+    document.getElementById('modal-login').classList.add('active');
+  }
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(type) {
+  document.getElementById(`modal-${type}`).classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o){o.classList.remove('active');document.body.style.overflow='';} });
+});
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(o=>{o.classList.remove('active');document.body.style.overflow='';});
+});
+function handleSignup(e) {
+  e.preventDefault();
+  const form = e.target;
+  const name = form.querySelector('input[type="text"]').value;
+  const email = form.querySelector('input[type="email"]').value;
+  const btn = form.querySelector('button[type="submit"]');
+  const planEl = document.getElementById('modal-plan-name');
+  const plan = planEl && document.getElementById('modal-plan').style.display !== 'none' ? planEl.textContent : 'Monthly';
+
+  btn.textContent='Creating account...'; btn.disabled=true;
+  setTimeout(() => {
+    // Save user
+    const user = { name, email, plan, planPrice: getPlanPrice(plan), joined: new Date().toISOString(), status: 'active' };
+    localStorage.setItem('tb_user', JSON.stringify(user));
+    btn.textContent='Account created!'; btn.style.background='linear-gradient(135deg,#10B981,#059669)';
+    setTimeout(() => {
+      closeModal('signup');
+      btn.textContent='Create Account'; btn.style.background=''; btn.disabled=false;
+      form.reset();
+      loginUser(user);
+    }, 1200);
+  }, 1500);
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const form = e.target;
+  const email = form.querySelector('input[type="email"]').value;
+  const btn = form.querySelector('button[type="submit"]');
+  btn.textContent='Logging in...'; btn.disabled=true;
+
+  // Check if user exists in localStorage
+  const stored = localStorage.getItem('tb_user');
+  setTimeout(() => {
+    if (stored) {
+      const user = JSON.parse(stored);
+      btn.textContent='Welcome back!'; btn.style.background='linear-gradient(135deg,#10B981,#059669)';
+      setTimeout(() => {
+        closeModal('login');
+        btn.textContent='Log In'; btn.style.background=''; btn.disabled=false;
+        form.reset();
+        loginUser(user);
+      }, 1000);
+    } else {
+      // Create account from login
+      const user = { name: email.split('@')[0], email, plan: 'Monthly', planPrice: '$49/mo', joined: new Date().toISOString(), status: 'active' };
+      localStorage.setItem('tb_user', JSON.stringify(user));
+      btn.textContent='Welcome!'; btn.style.background='linear-gradient(135deg,#10B981,#059669)';
+      setTimeout(() => {
+        closeModal('login');
+        btn.textContent='Log In'; btn.style.background=''; btn.disabled=false;
+        form.reset();
+        loginUser(user);
+      }, 1000);
+    }
+  }, 1200);
+}
+
+function getPlanPrice(plan) {
+  if (plan.includes('Lifetime')) return '$799 one-time';
+  if (plan.includes('Annual') || plan.includes('Pro')) return '$29/mo, billed yearly';
+  return '$49/mo';
+}
+
+function loginUser(user) {
+  localStorage.setItem('tb_logged_in', '1');
+  // Update navbar
+  document.getElementById('nav-login-btn').style.display = 'none';
+  document.getElementById('nav-signup-btn').style.display = 'none';
+  document.getElementById('nav-user-menu').style.display = 'flex';
+  // Show dashboard
+  showUserDashboard();
+}
+
+function logoutUser() {
+  localStorage.removeItem('tb_logged_in');
+  document.getElementById('nav-login-btn').style.display = '';
+  document.getElementById('nav-signup-btn').style.display = '';
+  document.getElementById('nav-user-menu').style.display = 'none';
+  document.getElementById('user-dashboard').style.display = 'none';
+  document.getElementById('marketing-site').style.display = '';
+  window.scrollTo(0, 0);
+}
+
+function showUserDashboard() {
+  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
+  // Hide marketing, show dashboard
+  document.getElementById('marketing-site').style.display = 'none';
+  document.getElementById('user-dashboard').style.display = 'block';
+  document.body.style.overflow = 'auto';
+  window.scrollTo(0, 0);
+
+  // Populate
+  document.getElementById('dash-username').textContent = user.name || 'Trader';
+  document.getElementById('dash-plan-name').textContent = user.plan || 'Monthly';
+  const joined = user.joined ? new Date(user.joined) : new Date();
+  document.getElementById('dash-member-since').textContent = joined.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+  // Account settings
+  const accName = document.getElementById('acc-name');
+  const accEmail = document.getElementById('acc-email');
+  if (accName) accName.value = user.name || '';
+  if (accEmail) accEmail.value = user.email || '';
+
+  // Plan badge status
+  const badge = document.getElementById('dash-plan-badge');
+  if (user.status === 'cancelled') {
+    badge.textContent = 'Cancelled';
+    badge.style.background = 'rgba(239,68,68,0.1)';
+    badge.style.color = 'var(--red2)';
+    badge.style.borderColor = 'rgba(239,68,68,0.15)';
+  } else {
+    badge.textContent = 'Active';
+    badge.style.background = 'rgba(16,185,129,0.1)';
+    badge.style.color = 'var(--green2)';
+    badge.style.borderColor = 'rgba(16,185,129,0.15)';
+  }
+
+  // Billing
+  const bp = document.getElementById('billing-plan-name');
+  const bpr = document.getElementById('billing-plan-price');
+  if (bp) bp.textContent = user.plan || 'Monthly';
+  if (bpr) bpr.textContent = user.planPrice || '$49/mo';
+
+  // Billing status badge
+  const bsBadge = document.getElementById('billing-status-badge');
+  const cancelBtn = document.getElementById('btn-cancel-plan');
+  const cancelMsg = document.getElementById('billing-cancelled-msg');
+  if (user.status === 'cancelled') {
+    bsBadge.textContent = 'Cancelled';
+    bsBadge.style.background = 'rgba(239,68,68,0.1)';
+    bsBadge.style.color = 'var(--red2)';
+    cancelMsg.style.display = 'block';
+    cancelBtn.disabled = true;
+    cancelBtn.style.opacity = '0.4';
+    cancelBtn.style.cursor = 'not-allowed';
+  } else {
+    bsBadge.textContent = 'Active';
+    bsBadge.style.background = 'rgba(16,185,129,0.1)';
+    bsBadge.style.color = 'var(--green2)';
+    cancelMsg.style.display = 'none';
+    cancelBtn.disabled = false;
+    cancelBtn.style.opacity = '';
+    cancelBtn.style.cursor = '';
+  }
+
+  // Payment method from localStorage
+  const payment = JSON.parse(localStorage.getItem('tb_payment') || '{}');
+  if (payment.last4) {
+    document.getElementById('payment-card-number').textContent = '\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 ' + payment.last4;
+    document.getElementById('payment-card-expiry').textContent = 'Expires ' + payment.expiry;
+  }
+
+  // Billing history
+  const bh = document.getElementById('billing-history');
+  if (bh) {
+    const months = ['Apr','Mar','Feb','Jan','Dec','Nov'];
+    const amt = user.plan?.includes('Lifetime') ? '$799.00' : user.plan?.includes('Annual') ? '$348.00' : '$49.00';
+    const freq = user.plan?.includes('Lifetime') ? 1 : user.plan?.includes('Annual') ? 1 : 6;
+    bh.innerHTML = months.slice(0, freq).map((m,i) => `
+      <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);color:var(--text2);">
+        <span>${m} 2026</span>
+        <span style="font-family:var(--mono);font-weight:600;">${i===0?amt:user.plan?.includes('Lifetime')?'':'$49.00'}</span>
+        <span style="color:var(--green2);font-size:11px;">Paid</span>
+      </div>
+    `).join('');
+  }
+
+  // Activity feed
+  const act = document.getElementById('dash-activity');
+  if (act) {
+    const activities = [
+      { t: '2 hours ago', text: 'Fibonacci Retracement signal generated — BTC LONG' },
+      { t: '5 hours ago', text: 'MACD Divergence trade closed — +$847.20 profit' },
+      { t: 'Yesterday', text: 'Wyckoff Spring signal accepted @ $84,230' },
+      { t: 'Yesterday', text: 'Nison Candlesticks signal expired — missed entry window' },
+      { t: '2 days ago', text: 'Fibonacci Retracement trade closed — +$1,204.60 profit' },
+      { t: '3 days ago', text: 'Exchange API keys updated (Coinbase)' },
+    ];
+    act.innerHTML = activities.map(a => `
+      <div style="display:flex;gap:16px;align-items:baseline;">
+        <span style="font-size:11px;color:var(--text3);min-width:90px;font-family:var(--mono);">${a.t}</span>
+        <span>${a.text}</span>
+      </div>
+    `).join('');
+  }
+
+  showDashSection('overview');
+}
+
+function showDashSection(section) {
+  ['overview','account','billing'].forEach(s => {
+    const el = document.getElementById('dash-section-' + s);
+    if (el) el.style.display = s === section ? 'block' : 'none';
+  });
+}
+
+function saveAccount() {
+  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
+  user.name = document.getElementById('acc-name')?.value || user.name;
+  localStorage.setItem('tb_user', JSON.stringify(user));
+  document.getElementById('dash-username').textContent = user.name;
+  alert('Account updated');
+}
+
+function saveExchangeKeys() {
+  const ex = document.getElementById('acc-exchange')?.value || 'coinbase';
+  const key = document.getElementById('acc-api-key')?.value || '';
+  const secret = document.getElementById('acc-api-secret')?.value || '';
+  localStorage.setItem(`tb_${ex}_key`, key);
+  localStorage.setItem(`tb_${ex}_secret`, secret);
+  alert(`${ex.charAt(0).toUpperCase() + ex.slice(1)} API keys saved`);
+}
+
+/* ═══════════════════════════════════════════════════
+   PASSWORD VALIDATION
+   ═══════════════════════════════════════════════════ */
+function updatePassword() {
+  const current = document.getElementById('pw-current').value;
+  const newPw = document.getElementById('pw-new').value;
+  const confirm = document.getElementById('pw-confirm').value;
+  const errEl = document.getElementById('pw-error');
+  const successEl = document.getElementById('pw-success');
+  errEl.style.display = 'none';
+  successEl.style.display = 'none';
+
+  if (!current || !newPw || !confirm) {
+    errEl.textContent = 'All password fields are required.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (newPw.length < 8) {
+    errEl.textContent = 'New password must be at least 8 characters.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (newPw !== confirm) {
+    errEl.textContent = 'New password and confirmation do not match.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Clear fields and show success
+  document.getElementById('pw-current').value = '';
+  document.getElementById('pw-new').value = '';
+  document.getElementById('pw-confirm').value = '';
+  successEl.textContent = 'Password updated successfully.';
+  successEl.style.display = 'block';
+  setTimeout(() => { successEl.style.display = 'none'; }, 4000);
+}
+
+/* ═══════════════════════════════════════════════════
+   PAYMENT METHOD
+   ═══════════════════════════════════════════════════ */
+function showPaymentForm() {
+  document.getElementById('payment-form').style.display = 'block';
+  document.getElementById('payment-error').style.display = 'none';
+  const stored = JSON.parse(localStorage.getItem('tb_payment') || '{}');
+  if (stored.last4) document.getElementById('pay-card-last4').value = stored.last4;
+  if (stored.expiry) document.getElementById('pay-card-expiry').value = stored.expiry;
+}
+
+function savePaymentMethod() {
+  const last4 = document.getElementById('pay-card-last4').value.trim();
+  const expiry = document.getElementById('pay-card-expiry').value.trim();
+  const errEl = document.getElementById('payment-error');
+  errEl.style.display = 'none';
+
+  if (!/^\d{4}$/.test(last4)) {
+    errEl.textContent = 'Enter exactly 4 digits for card number.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+    errEl.textContent = 'Enter expiry in MM/YY format.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  localStorage.setItem('tb_payment', JSON.stringify({ last4, expiry }));
+  document.getElementById('payment-card-number').textContent = '\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 ' + last4;
+  document.getElementById('payment-card-expiry').textContent = 'Expires ' + expiry;
+  document.getElementById('payment-form').style.display = 'none';
+}
+
+/* ═══════════════════════════════════════════════════
+   CANCEL PLAN
+   ═══════════════════════════════════════════════════ */
+function cancelPlan() {
+  if (!confirm('Cancel your subscription?')) return;
+  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
+  user.status = 'cancelled';
+  localStorage.setItem('tb_user', JSON.stringify(user));
+
+  // Update billing display
+  document.getElementById('billing-status-badge').textContent = 'Cancelled';
+  document.getElementById('billing-status-badge').style.background = 'rgba(239,68,68,0.1)';
+  document.getElementById('billing-status-badge').style.color = 'var(--red2)';
+  document.getElementById('billing-cancelled-msg').style.display = 'block';
+  document.getElementById('btn-cancel-plan').disabled = true;
+  document.getElementById('btn-cancel-plan').style.opacity = '0.4';
+  document.getElementById('btn-cancel-plan').style.cursor = 'not-allowed';
+
+  // Update top-level plan badge
+  const badge = document.getElementById('dash-plan-badge');
+  badge.textContent = 'Cancelled';
+  badge.style.background = 'rgba(239,68,68,0.1)';
+  badge.style.color = 'var(--red2)';
+  badge.style.borderColor = 'rgba(239,68,68,0.15)';
+}
+
+/* ═══════════════════════════════════════════════════
+   CHANGE PLAN
+   ═══════════════════════════════════════════════════ */
+function showChangePlan() {
+  const panel = document.getElementById('change-plan-options');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  // Pre-select current plan
+  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
+  const radios = document.querySelectorAll('input[name="plan-choice"]');
+  radios.forEach(r => { r.checked = r.value === (user.plan || 'Monthly'); });
+}
+
+function confirmChangePlan() {
+  const selected = document.querySelector('input[name="plan-choice"]:checked');
+  if (!selected) { alert('Please select a plan.'); return; }
+
+  const plan = selected.value;
+  const price = getPlanPrice(plan);
+  const user = JSON.parse(localStorage.getItem('tb_user') || '{}');
+  user.plan = plan;
+  user.planPrice = price;
+  user.status = 'active';
+  localStorage.setItem('tb_user', JSON.stringify(user));
+
+  // Update all displays
+  document.getElementById('billing-plan-name').textContent = plan;
+  document.getElementById('billing-plan-price').textContent = price;
+  document.getElementById('dash-plan-name').textContent = plan;
+  document.getElementById('change-plan-options').style.display = 'none';
+
+  // Reset cancelled state if re-subscribing
+  document.getElementById('billing-status-badge').textContent = 'Active';
+  document.getElementById('billing-status-badge').style.background = 'rgba(16,185,129,0.1)';
+  document.getElementById('billing-status-badge').style.color = 'var(--green2)';
+  document.getElementById('billing-cancelled-msg').style.display = 'none';
+  document.getElementById('btn-cancel-plan').disabled = false;
+  document.getElementById('btn-cancel-plan').style.opacity = '';
+  document.getElementById('btn-cancel-plan').style.cursor = '';
+  const badge = document.getElementById('dash-plan-badge');
+  badge.textContent = 'Active';
+  badge.style.background = 'rgba(16,185,129,0.1)';
+  badge.style.color = 'var(--green2)';
+  badge.style.borderColor = 'rgba(16,185,129,0.15)';
+}
+
+/* ═══════════════════════════════════════════════════
+   NAVBAR NAVIGATION (from dashboard back to marketing)
+   ═══════════════════════════════════════════════════ */
+function goToHomepage() {
+  const dash = document.getElementById('user-dashboard');
+  if (dash && dash.style.display !== 'none') {
+    dash.style.display = 'none';
+    document.getElementById('marketing-site').style.display = '';
+    window.scrollTo(0, 0);
+  }
+}
+
+function navTo(e, hash) {
+  const dash = document.getElementById('user-dashboard');
+  if (dash && dash.style.display !== 'none') {
+    e.preventDefault();
+    dash.style.display = 'none';
+    document.getElementById('marketing-site').style.display = '';
+    // Wait a tick for the marketing content to be visible, then scroll
+    setTimeout(() => {
+      const target = document.querySelector(hash);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  }
+  // If already on marketing page, default anchor behavior handles it
+}
+
+// Check if already logged in on page load
+function checkAuth() {
+  if (localStorage.getItem('tb_logged_in') === '1' && localStorage.getItem('tb_user')) {
+    const user = JSON.parse(localStorage.getItem('tb_user'));
+    document.getElementById('nav-login-btn').style.display = 'none';
+    document.getElementById('nav-signup-btn').style.display = 'none';
+    document.getElementById('nav-user-menu').style.display = 'flex';
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   PARALLAX ON SCROLL
+   ═══════════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  document.querySelectorAll('.blob').forEach((b, i) => {
+    b.style.transform = `translateY(${sy * (0.05 + i * 0.02)}px)`;
+  });
+}, { passive: true });
+
+/* ═══════════════════════════════════════════════════
+   LIVE SIGNAL COUNTER INCREMENT
+   ═══════════════════════════════════════════════════ */
+(function() {
+  let signalCount = 156420;
+  const signalEl = document.getElementById('signals-counter');
+  function tickSignal() {
+    signalCount++;
+    if (signalEl) signalEl.textContent = signalCount.toLocaleString();
+    const next = 8000 + Math.random() * 7000;
+    setTimeout(tickSignal, next);
+  }
+  // Start after initial count-up animation finishes (approx 3s)
+  setTimeout(tickSignal, 4000);
+})();
+
+/* ═══════════════════════════════════════════════════
+   EQUITY P&L SLOW INCREMENT
+   ═══════════════════════════════════════════════════ */
+(function() {
+  let equity = 217840;
+  const eqEl = document.getElementById('equity-total');
+  function tickEquity() {
+    equity += Math.floor(1 + Math.random() * 5);
+    if (eqEl) eqEl.textContent = '+$' + equity.toLocaleString();
+    const next = 3000 + Math.random() * 4000;
+    setTimeout(tickEquity, next);
+  }
+  // Start after equity chart draws
+  setTimeout(tickEquity, 5000);
+})();
+</script>
+</body>
+</html>
