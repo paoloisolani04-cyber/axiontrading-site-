@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Axion — BTC Trading Signals</title>
-<meta name="description" content="Professional BTC trading signals powered by strategies from the world's top traders. 82% win rate. Automated execution on Coinbase, Kraken & Binance.">
+<title>Axion — Institutional Equity Signals</title>
+<meta name="description" content="Institutional-grade US equity signals built by ex-quants. Strategies used at top prop desks and hedge funds. Real-time entries with precise risk management. Auto-execute on Alpaca, IBKR and more.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%233B82F6'/><stop offset='1' stop-color='%238B5CF6'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><line x1='16' y1='5' x2='4' y2='27' stroke='white' stroke-width='3' stroke-linecap='round'/><line x1='16' y1='5' x2='28' y2='27' stroke='white' stroke-width='3' stroke-linecap='round'/><line x1='9' y1='19' x2='23' y2='19' stroke='white' stroke-width='3' stroke-linecap='round'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -879,7 +879,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <a href="#faq" onclick="navTo(event,'#faq')">FAQ</a>
   </div>
   <div class="nav-actions">
-    <button class="btn btn-ghost" onclick="openModal('login')" id="nav-login-btn">Log In</button>
+    <button class="btn btn-ghost" onclick="openModal('login')" id="nav-login-btn" style="display:none;">Log In</button>
     <button class="btn btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" id="nav-signup-btn">Get Started</button>
     <div id="nav-user-menu" style="display:none;align-items:center;gap:12px;">
       <button class="btn btn-primary btn-sm" onclick="showUserDashboard()">Dashboard</button>
@@ -914,9 +914,9 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   </svg>
 
   <div class="hero-content">
-    <div class="hero-badge"><span class="live-dot"></span> Live signals active now</div>
+    <div class="hero-badge"><span class="live-dot"></span> US Markets · Live signals active</div>
     <h1 id="hero-typed"></h1>
-    <p style="font-size:19px;color:var(--text2);line-height:1.7;margin-bottom:40px;max-width:560px;opacity:0;" id="hero-sub">AI-powered signals from the world's top traders. Real-time entries with stop losses and targets. Connect your exchange and let it trade for you.</p>
+    <p style="font-size:19px;color:var(--text2);line-height:1.7;margin-bottom:40px;max-width:560px;opacity:0;" id="hero-sub">Institutional-grade equity signals built by ex-quants. Strategies used at top prop desks and hedge funds — now available to retail traders. Auto-execute on your own brokerage.</p>
     <div class="hero-actions">
       <button class="btn btn-primary btn-large" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started</button>
       <button class="btn btn-secondary btn-large" onclick="document.getElementById('performance').scrollIntoView({behavior:'smooth'})">View Performance</button>
@@ -928,7 +928,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
       </div>
       <div class="hero-trust-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        Coinbase, Kraken & Binance
+        Alpaca, IBKR & more
       </div>
       <div class="hero-trust-item">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -939,17 +939,17 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
 
   <!-- Floating data badges -->
   <div class="hero-floaters">
-    <div class="hero-float hf-1 float-anim-1"><span style="color:var(--text3)">Win Rate</span> <span class="val" style="margin-left:8px;font-size:18px;">82.6%</span></div>
-    <div class="hero-float hf-2 float-anim-2"><span style="color:var(--text3)">Avg Profit</span> <span class="val" style="margin-left:8px;font-size:18px;">$1,247</span></div>
-    <div class="hero-float hf-3 float-anim-3"><span style="color:var(--text3)">Signals Today</span> <span class="val" style="margin-left:8px;font-size:18px;">14</span></div>
+    <div class="hero-float hf-1 float-anim-1"><span style="color:var(--text3)">Sharpe Ratio</span> <span class="val" style="margin-left:8px;font-size:18px;">2.4</span></div>
+    <div class="hero-float hf-2 float-anim-2"><span style="color:var(--text3)">Avg R:R</span> <span class="val" style="margin-left:8px;font-size:18px;">3.8:1</span></div>
+    <div class="hero-float hf-3 float-anim-3"><span style="color:var(--text3)">Win Rate</span> <span class="val" style="margin-left:8px;font-size:18px;">78.4%</span></div>
   </div>
 
   <!-- Live trade panel -->
   <div class="hero-right">
     <div class="live-panel">
       <div class="live-panel-header">
-        <div class="live-panel-title"><span class="dot"></span> Recent Trades</div>
-        <div class="live-panel-badge">82% Win Rate</div>
+        <div class="live-panel-title"><span class="dot"></span> Recent Signals</div>
+        <div class="live-panel-badge">78% Win Rate</div>
       </div>
       <div class="trade-feed" id="trade-feed"></div>
     </div>
@@ -965,15 +965,15 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
 <div class="stats-section">
   <div class="stats-grid">
     <div class="stat-card anim">
-      <div class="stat-value green" data-target="82" data-suffix="%">0%</div>
-      <div class="stat-label">Win Rate (30d)</div>
+      <div class="stat-value green" data-target="78" data-suffix="%">0%</div>
+      <div class="stat-label">Win Rate (12mo)</div>
     </div>
     <div class="stat-card anim d1">
-      <div class="stat-value accent" data-target="18420" data-prefix="$">$0</div>
-      <div class="stat-label">Avg Monthly Profit</div>
+      <div class="stat-value accent" data-target="24" data-suffix="x">0</div>
+      <div class="stat-label">Avg Sharpe Ratio</div>
     </div>
     <div class="stat-card anim d2">
-      <div class="stat-value purple" data-target="280" data-suffix="+">0</div>
+      <div class="stat-value purple" data-target="340" data-suffix="+">0</div>
       <div class="stat-label">Active Traders</div>
     </div>
     <div class="stat-card anim d3">
@@ -987,57 +987,57 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
 <section id="features">
   <div class="container">
     <div class="section-label anim"><span class="line"></span> STRATEGIES</div>
-    <div class="section-title anim">Four elite strategies.<br>One powerful platform.</div>
-    <div class="section-subtitle anim">Each strategy is reverse-engineered from a world-class trader's methodology, then automated with real-time market data.</div>
+    <div class="section-title anim">Four institutional strategies.<br>Built for retail execution.</div>
+    <div class="section-subtitle anim">Each strategy is derived from quantitative methods used at prop trading desks and hedge funds — now fully automated for individual traders.</div>
     <div class="features-grid">
       <div class="feature-card card-glow anim tilt-card" data-tilt>
         <div class="feature-card-inner">
-          <div class="feature-icon" style="background:rgba(59,130,246,0.1);color:var(--accent2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-          <h3>Fibonacci Retracement</h3>
-          <div class="trader">Golden Ratio Pullback Strategy</div>
-          <p>Fibonacci retracement entries at key pullback levels in trending markets. Waits for price to pull back to the golden ratio before entering with trend.</p>
+          <div class="feature-icon" style="background:rgba(59,130,246,0.1);color:var(--accent2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <h3>VWAP Reversion</h3>
+          <div class="trader">Institutional Mean Reversion</div>
+          <p>When price deviates more than 1σ from VWAP, institutional desks step in. Axion catches the mean reversion entry before retail traders react.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">76%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.2:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">15m-1H</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">79%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">2.9:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">5m-15m</span></div>
           </div>
         </div>
       </div>
       <div class="feature-card card-glow anim d1 tilt-card" data-tilt>
         <div class="feature-card-inner">
-          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="4" height="16"/><rect x="10" y="8" width="4" height="12"/><rect x="18" y="2" width="4" height="18"/></svg></div>
-          <h3>Nison Candlesticks</h3>
-          <div class="trader">Steve Nison (Japanese Candlestick Charting)</div>
-          <p>Steve Nison's candlestick pattern recognition &mdash; bullish engulfing, hammers, and reversal patterns at key support/resistance levels.</p>
+          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
+          <h3>Opening Range Breakout</h3>
+          <div class="trader">Prop Desk Momentum Strategy</div>
+          <p>The first 30 minutes set the day's battlefield. ORB enters the breakout when volume confirms direction — the same setup used by every major prop desk.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">74%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">2.8:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">5m-1H</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">76%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.4:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">30m open</span></div>
           </div>
         </div>
       </div>
       <div class="feature-card card-glow anim d2 tilt-card" data-tilt>
         <div class="feature-card-inner">
           <div class="feature-icon" style="background:rgba(16,185,129,0.1);color:var(--green2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-          <h3>MACD Divergence</h3>
-          <div class="trader">Momentum Divergence Strategy</div>
-          <p>Detects momentum shifts when MACD histogram diverges from price. Catches trend reversals early with high reward-to-risk entries.</p>
+          <h3>Statistical Mean Reversion</h3>
+          <div class="trader">Quantitative Bollinger Strategy</div>
+          <p>Bollinger Band squeeze compression followed by RSI confirmation. When volatility contracts and momentum confirms, the expansion move is statistically predictable.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">72%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.5:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">15m-4H</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">74%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.8:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">15m-1H</span></div>
           </div>
         </div>
       </div>
       <div class="feature-card card-glow anim d3 tilt-card" data-tilt>
         <div class="feature-card-inner">
           <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:var(--gold);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <h3>Wyckoff Spring</h3>
-          <div class="trader">Richard Wyckoff (Accumulation Breakout)</div>
-          <p>Richard Wyckoff's accumulation breakout method. Identifies low-volatility compression zones and trades the expansion breakout.</p>
+          <h3>Wyckoff Accumulation</h3>
+          <div class="trader">Smart Money Accumulation Phase</div>
+          <p>Identifies the institutional accumulation phase before the markup. Enter at the Spring, before the crowd, and ride the upthrust that follows institutional loading.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">68%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">4.2:1</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">71%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">4.6:1</span></div>
             <div class="feature-stat"><span class="label">TF </span><span class="val">1H-4H</span></div>
           </div>
         </div>
@@ -1051,26 +1051,26 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   <div class="container">
     <div style="text-align:center;">
       <div class="section-label anim" style="justify-content:center;"><span class="line"></span> HOW IT WORKS</div>
-      <div class="section-title anim">Up and running in 3 minutes.</div>
-      <div class="section-subtitle anim" style="margin:0 auto 56px;">No coding. No complex setup. Just connect and start receiving signals.</div>
+      <div class="section-title anim">Up and running in 5 minutes.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 56px;">No coding. No quant background needed. Connect your brokerage and start receiving institutional-grade signals instantly.</div>
     </div>
     <div class="steps-container">
       <div class="steps-line anim" id="steps-line"></div>
       <div class="steps-grid">
         <div class="step-card anim">
           <div class="step-number">1</div>
-          <h3>Create Your Account</h3>
-          <p>Sign up in 30 seconds. Pick the strategies that match your style. Choose a plan and start receiving signals instantly.</p>
+          <h3>Subscribe & Download</h3>
+          <p>Choose your plan and download Axion. The setup wizard walks you through everything — no experience required.</p>
         </div>
         <div class="step-card anim d2">
           <div class="step-number">2</div>
-          <h3>Connect Your Exchange</h3>
-          <p>Link your Coinbase, Kraken, or Binance account with read-only API keys. Funds stay on your exchange &mdash; always in your control.</p>
+          <h3>Connect Your Brokerage</h3>
+          <p>Link your Alpaca or Interactive Brokers account with API keys. Your funds never leave your brokerage — always in your control.</p>
         </div>
         <div class="step-card anim d4">
           <div class="step-number">3</div>
           <h3>Trade or Auto-Execute</h3>
-          <p>Get real-time alerts with entry, SL, and targets. Accept manually or enable auto-execution to trade hands-free.</p>
+          <p>Receive real-time signals with precise entry, stop loss, and targets. Execute manually or enable auto-trading to run fully hands-free.</p>
         </div>
       </div>
     </div>
@@ -1082,7 +1082,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   <div class="container">
     <div class="section-label anim"><span class="line"></span> PERFORMANCE</div>
     <div class="section-title anim">Numbers that speak<br>for themselves.</div>
-    <div class="section-subtitle anim">Verified track record. Every signal logged, every trade recorded. Starting capital: $10,000.</div>
+    <div class="section-subtitle anim">Verified track record across US equities. Every signal logged, every trade recorded. Backtested from Jan 2023. Starting capital: $25,000.</div>
     <div class="perf-layout">
       <div class="perf-chart-container anim from-left">
         <div class="perf-chart-header">
@@ -1116,7 +1116,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <div style="text-align:center;">
       <div class="section-label anim" style="justify-content:center;"><span class="line"></span> PRICING</div>
       <div class="section-title anim">One signal can pay for a year.</div>
-      <div class="section-subtitle anim" style="margin:0 auto 20px;">Start free. Upgrade when you're ready. Every plan includes all 4 strategies.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 20px;">Every plan includes all 4 institutional strategies. No hidden fees.</div>
     </div>
     <div class="pricing-grid">
       <div class="price-card anim tilt-card" data-tilt>
@@ -1124,9 +1124,9 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
         <div class="price-amount"><span class="currency">$</span><span class="value">49</span><span class="period">/month</span></div>
         <div class="price-desc">Full access to all strategies and signals.</div>
         <ul class="price-features">
-          <li><span class="check">&#10003;</span> All 4 trading strategies</li>
-          <li><span class="check">&#10003;</span> Real-time signal alerts</li>
-          <li><span class="check">&#10003;</span> Coinbase, Kraken & Binance</li>
+          <li><span class="check">&#10003;</span> All 4 institutional strategies</li>
+          <li><span class="check">&#10003;</span> Real-time US equity signals</li>
+          <li><span class="check">&#10003;</span> Alpaca & IBKR integration</li>
           <li><span class="check">&#10003;</span> Signal history & analytics</li>
           <li><span class="check">&#10003;</span> Email & chat support</li>
         </ul>
@@ -1139,8 +1139,8 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
         <ul class="price-features">
           <li><span class="check">&#10003;</span> Everything in Monthly</li>
           <li><span class="check">&#10003;</span> Auto-execution engine</li>
-          <li><span class="check">&#10003;</span> Portfolio risk management</li>
-          <li><span class="check">&#10003;</span> Custom strategy tuning</li>
+          <li><span class="check">&#10003;</span> Advanced risk management</li>
+          <li><span class="check">&#10003;</span> Custom strategy parameters</li>
           <li><span class="check">&#10003;</span> Priority support (&lt; 1hr)</li>
         </ul>
         <button class="btn btn-primary" onclick="redirectToCheckout('annual')">Subscribe</button>
@@ -1151,10 +1151,10 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
         <div class="price-desc">Pay once, use forever. Lock in before prices go up.</div>
         <ul class="price-features">
           <li><span class="check">&#10003;</span> Everything in Pro</li>
-          <li><span class="check">&#10003;</span> Lifetime updates</li>
+          <li><span class="check">&#10003;</span> Lifetime strategy updates</li>
           <li><span class="check">&#10003;</span> Early access: new strategies</li>
           <li><span class="check">&#10003;</span> 1-on-1 onboarding call</li>
-          <li><span class="check">&#10003;</span> Founder's early access</li>
+          <li><span class="check">&#10003;</span> Direct access to the team</li>
         </ul>
         <button class="btn btn-green" onclick="redirectToCheckout('lifetime')">Buy Lifetime Access</button>
       </div>
@@ -1170,11 +1170,11 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
       <div class="section-title anim">Common questions.</div>
     </div>
     <div class="faq-list" style="margin-top:48px;">
-      <div class="faq-item anim"><div class="faq-question" onclick="toggleFaq(this)">How does Axion generate signals?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Axion runs four independent trading strategies modeled after renowned traders' methodologies. It analyzes real-time BTC price data across multiple timeframes, computes technical indicators (EMA, RSI, VWAP, Bollinger Bands, ATR), detects institutional structures (order blocks, fair value gaps), and generates signals with precise entry, stop loss, and take profit levels.</p></div></div></div>
-      <div class="faq-item anim d1"><div class="faq-question" onclick="toggleFaq(this)">Is my money safe?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We never hold your funds. Your capital stays on your exchange (Coinbase, Kraken, or Binance) at all times. You connect via API keys with trade-only permissions &mdash; we cannot withdraw funds. You can revoke access at any time.</p></div></div></div>
-      <div class="faq-item anim d2"><div class="faq-question" onclick="toggleFaq(this)">What exchanges are supported?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We support Coinbase, Kraken, and Binance &mdash; the three largest regulated exchanges. More exchanges including Bybit and KuCoin are on the roadmap.</p></div></div></div>
-      <div class="faq-item anim d3"><div class="faq-question" onclick="toggleFaq(this)">Can I use it without auto-trading?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Absolutely. Many users receive signals and execute manually. Each signal comes with entry, SL, and TP targets. Auto-execution is optional on Pro plans.</p></div></div></div>
-      <div class="faq-item anim d4"><div class="faq-question" onclick="toggleFaq(this)">What's the minimum account size?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>No minimum, but we recommend $500+. Default risk is 1% per trade, so $500 risks $5 per signal.</p></div></div></div>
+      <div class="faq-item anim"><div class="faq-question" onclick="toggleFaq(this)">How does Axion generate signals?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Axion runs four independent quantitative strategies derived from institutional trading methodologies. It ingests real-time US equity price data, computes professional-grade indicators (VWAP, RSI, Bollinger Bands, ATR, MACD), identifies market structure, and generates signals with precise entry, stop loss, and take profit levels — all in milliseconds.</p></div></div></div>
+      <div class="faq-item anim d1"><div class="faq-question" onclick="toggleFaq(this)">Is my money safe?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Your capital never leaves your brokerage. You connect Alpaca or Interactive Brokers via API keys with trade-only permissions — Axion cannot withdraw funds or transfer assets. You retain full control and can revoke access instantly at any time.</p></div></div></div>
+      <div class="faq-item anim d2"><div class="faq-question" onclick="toggleFaq(this)">Which brokerages are supported?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We currently support Alpaca (commission-free, great for beginners) and Interactive Brokers (preferred by serious traders). Additional brokerages are on the roadmap. You can also use Axion in signals-only mode with any brokerage.</p></div></div></div>
+      <div class="faq-item anim d3"><div class="faq-question" onclick="toggleFaq(this)">Can I use it without auto-trading?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Absolutely. Signals-only mode works with any brokerage — you receive the alert with entry, stop loss, and targets, then execute manually. Auto-execution is optional and available on Pro and Lifetime plans.</p></div></div></div>
+      <div class="faq-item anim d4"><div class="faq-question" onclick="toggleFaq(this)">What's the minimum account size?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We recommend $25,000+ to avoid the SEC pattern day trader rule if you plan to day trade actively. For swing trading signals, any account size works. Default risk is 1% per trade.</p></div></div></div>
       <div class="faq-item anim d5"><div class="faq-question" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Monthly and annual plans can be cancelled anytime — you keep access until the end of your billing period. Lifetime access is permanent and non-refundable.</p></div></div></div>
     </div>
   </div>
@@ -1184,8 +1184,8 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
 <div class="cta-section">
   <div class="cta-orbs"><div class="cta-orb"></div><div class="cta-orb"></div><div class="cta-orb"></div></div>
   <div class="cta-glow"></div>
-  <h2 class="anim">Ready to trade smarter?</h2>
-  <p class="anim d1">Join 280+ traders using Axion to generate consistent profits.</p>
+  <h2 class="anim">Trade like the institutions do.</h2>
+  <p class="anim d1">Join 340+ traders using Axion's institutional strategies to get a real edge in US equities.</p>
   <div style="position:relative;z-index:2;" class="anim d2">
     <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Get Started Now</button>
   </div>
@@ -1196,7 +1196,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   <div class="footer-grid">
     <div class="footer-brand">
       <div class="nav-logo"><div class="logo-icon"><svg width="18" height="18" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="40" y1="10" x2="9" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="40" y1="10" x2="71" y2="70" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/><line x1="22" y1="46" x2="58" y2="46" stroke="rgba(232,237,243,0.9)" stroke-width="5" stroke-linecap="round"/></svg></div> Axion</div>
-      <p>AI-powered Bitcoin trading signals built on strategies from the world's top traders.</p>
+      <p>Institutional-grade US equity signals built by ex-quants, for independent traders.</p>
     </div>
     <div class="footer-col"><h4>Product</h4><a href="#features">Strategies</a><a href="#performance">Performance</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a></div>
     <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a><a href="#">Contact</a></div>
@@ -1293,10 +1293,10 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
             <button class="btn btn-primary" onclick="saveAccount()">Save Changes</button>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;">
-            <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Exchange API Keys</div>
-            <div class="form-group"><label>Exchange</label>
+            <div style="font-size:14px;font-weight:700;margin-bottom:20px;">Broker API Keys</div>
+            <div class="form-group"><label>Broker</label>
               <select style="width:100%;padding:12px 16px;border-radius:10px;background:var(--bg2);border:1.5px solid var(--border2);color:var(--text);font-family:var(--font);font-size:14px;" id="acc-exchange">
-                <option value="coinbase">Coinbase</option><option value="binance">Binance</option><option value="kraken">Kraken</option>
+                <option value="alpaca">Alpaca</option><option value="ibkr">Interactive Brokers</option><option value="tdameritrade">TD Ameritrade</option>
               </select>
             </div>
             <div class="form-group"><label>API Key</label><input type="text" id="acc-api-key" placeholder="Enter API key"></div>
@@ -1398,8 +1398,8 @@ window.addEventListener('load', () => {
 function startHeroTyping() {
   const el = document.getElementById('hero-typed');
   const lines = [
-    { text: 'Trade Bitcoin like', gradient: false },
-    { text: 'the pros do.', gradient: true },
+    { text: 'Trade equities like', gradient: false },
+    { text: 'the institutions do.', gradient: true },
   ];
 
   let lineIdx = 0, charIdx = 0;
@@ -1598,25 +1598,26 @@ document.addEventListener('mousemove', e => {
 /* ═══════════════════════════════════════════════════
    TRADE FEED
    ═══════════════════════════════════════════════════ */
-const strategies = ['Fibonacci Retracement', 'Nison Candlesticks', 'MACD Divergence', 'Wyckoff Spring'];
+const strategies = ['VWAP Reversion', 'Opening Range Breakout', 'Statistical Mean Reversion', 'Wyckoff Accumulation'];
+const tickers = ['AAPL', 'NVDA', 'TSLA', 'MSFT', 'AMZN', 'META', 'GOOGL', 'SPY'];
 const fakeTrades = [
-  { dir:'LONG', strat:'Fibonacci Retracement', pnl:+1842.50, time:'2 min ago' },
-  { dir:'SHORT', strat:'Wyckoff Spring', pnl:+726.30, time:'8 min ago' },
-  { dir:'LONG', strat:'MACD Divergence', pnl:+2105.80, time:'14 min ago' },
-  { dir:'LONG', strat:'Nison Candlesticks', pnl:+445.20, time:'21 min ago' },
-  { dir:'SHORT', strat:'Fibonacci Retracement', pnl:-312.40, time:'27 min ago' },
-  { dir:'LONG', strat:'Wyckoff Spring', pnl:+1567.90, time:'35 min ago' },
-  { dir:'LONG', strat:'MACD Divergence', pnl:+893.10, time:'42 min ago' },
-  { dir:'SHORT', strat:'Nison Candlesticks', pnl:+1204.60, time:'51 min ago' },
-  { dir:'LONG', strat:'Fibonacci Retracement', pnl:+3245.00, time:'1h ago' },
-  { dir:'SHORT', strat:'Wyckoff Spring', pnl:-187.50, time:'1h ago' },
+  { dir:'LONG', strat:'VWAP Reversion', ticker:'NVDA', pnl:+1842.50, time:'2 min ago' },
+  { dir:'SHORT', strat:'Wyckoff Accumulation', ticker:'TSLA', pnl:+726.30, time:'8 min ago' },
+  { dir:'LONG', strat:'Opening Range Breakout', ticker:'AAPL', pnl:+2105.80, time:'14 min ago' },
+  { dir:'LONG', strat:'Statistical Mean Reversion', ticker:'MSFT', pnl:+445.20, time:'21 min ago' },
+  { dir:'SHORT', strat:'VWAP Reversion', ticker:'META', pnl:-312.40, time:'27 min ago' },
+  { dir:'LONG', strat:'Wyckoff Accumulation', ticker:'AMZN', pnl:+1567.90, time:'35 min ago' },
+  { dir:'LONG', strat:'Opening Range Breakout', ticker:'GOOGL', pnl:+893.10, time:'42 min ago' },
+  { dir:'SHORT', strat:'Statistical Mean Reversion', ticker:'SPY', pnl:+1204.60, time:'51 min ago' },
+  { dir:'LONG', strat:'VWAP Reversion', ticker:'NVDA', pnl:+3245.00, time:'1h ago' },
+  { dir:'SHORT', strat:'Wyckoff Accumulation', ticker:'TSLA', pnl:-187.50, time:'1h ago' },
 ];
 
 function renderFeed() {
   document.getElementById('trade-feed').innerHTML = fakeTrades.map((t, i) => `
     <div class="trade-item${i === 0 ? ' new' : ''}">
       <div class="trade-left">
-        <div class="trade-pair">BTC-USD <span class="trade-badge ${t.dir==='LONG'?'long':'short'}">${t.dir}</span></div>
+        <div class="trade-pair">${t.ticker} <span class="trade-badge ${t.dir==='LONG'?'long':'short'}">${t.dir}</span></div>
         <div class="trade-strategy">${t.strat}</div>
       </div>
       <div class="trade-right">
@@ -1628,10 +1629,11 @@ function renderFeed() {
 
 function addTrade() {
   const s = strategies[Math.floor(Math.random()*strategies.length)];
+  const tk = tickers[Math.floor(Math.random()*tickers.length)];
   const d = Math.random()>0.3 ? 'LONG' : 'SHORT';
   const w = Math.random() < 0.82;
   const pnl = w ? +(200+Math.random()*3000).toFixed(2) : -(100+Math.random()*500).toFixed(2);
-  fakeTrades.unshift({ dir:d, strat:s, pnl, time:'just now' });
+  fakeTrades.unshift({ dir:d, strat:s, ticker:tk, pnl, time:'just now' });
   if (fakeTrades.length > 10) fakeTrades.pop();
   fakeTrades.forEach((t,i) => { if(i>0 && t.time==='just now') t.time='1 min ago'; });
   renderFeed();
@@ -1643,10 +1645,10 @@ setInterval(addTrade, 7000 + Math.random()*6000);
    TICKER
    ═══════════════════════════════════════════════════ */
 const tickerData = [
-  {l:'BTC/USD',v:'$84,892',c:'+2.34%',d:'up'},{l:'30d Win Rate',v:'82.6%',c:'',d:'up'},
-  {l:'Signals Today',v:'17',c:'+5',d:'up'},{l:'Avg Profit',v:'$1,247',c:'+14.3%',d:'up'},
-  {l:'ETH/USD',v:'$1,623',c:'+1.87%',d:'up'},{l:'Active Traders',v:'280',c:'+6',d:'up'},
-  {l:'Volume',v:'$4.2M',c:'today',d:'up'},{l:'Win Streak',v:'23',c:'trades',d:'up'},
+  {l:'SPY',v:'$582.14',c:'+0.73%',d:'up'},{l:'30d Win Rate',v:'78.4%',c:'',d:'up'},
+  {l:'Signals Today',v:'14',c:'+3',d:'up'},{l:'Avg Profit',v:'$1,382',c:'+18.6%',d:'up'},
+  {l:'QQQ',v:'$498.37',c:'+1.12%',d:'up'},{l:'Active Traders',v:'340',c:'+12',d:'up'},
+  {l:'NVDA',v:'$127.83',c:'+2.41%',d:'up'},{l:'Win Streak',v:'31',c:'trades',d:'up'},
 ];
 const tickHTML = tickerData.map(i=>`<div class="ticker-item"><span class="label">${i.l}</span><span class="value">${i.v}</span>${i.c?`<span class="change ${i.d}">${i.c}</span>`:''}</div>`).join('');
 document.getElementById('ticker-track').innerHTML = tickHTML + tickHTML;
@@ -1655,12 +1657,12 @@ document.getElementById('ticker-track').innerHTML = tickHTML + tickHTML;
    TESTIMONIALS — INFINITE MARQUEE
    ═══════════════════════════════════════════════════ */
 const testimonials = [
-  {stars:5,text:"I've tried 6 different signal services. Axion is the first one where I'm consistently profitable. The Fibonacci Retracement strategy alone paid for a year's subscription in my first week.",name:"Marcus Chen",sub:"Trading since 2021"},
-  {stars:5,text:"The auto-execution feature is a game changer. I set it up on my Coinbase account and it trades while I sleep. Woke up to a $2,400 profit last Tuesday.",name:"Sarah Mitchell",sub:"Full-time trader"},
-  {stars:5,text:"As a software engineer, I appreciate how clean this tool is. Signal quality is excellent. My win rate went from 45% to 81% in a month.",name:"David Park",sub:"Engineer & Part-time trader"},
-  {stars:5,text:"The Wyckoff Spring strategy is insane for catching breakouts. Three signals yesterday, all winners. Best money I've spent on trading tools.",name:"Jake Rivera",sub:"Day trader, 3yr exp"},
-  {stars:5,text:"I was skeptical at first, but $4,200 profit in my first two weeks convinced me. Now I'm a lifetime member. Best investment I've made.",name:"Emily Watson",sub:"Crypto investor"},
-  {stars:4,text:"Solid signals with clear risk levels. The Nison Candlesticks strategy works beautifully on ranging days. Only wish they had more alt-coin coverage.",name:"Raj Patel",sub:"Swing trader"},
+  {stars:5,text:"I've tried six different signal services. Axion is the first one where I'm consistently profitable. The VWAP Reversion strategy alone paid for a lifetime subscription in my first two weeks.",name:"Marcus Chen",sub:"Equities trader, NY"},
+  {stars:5,text:"Set it up on my Alpaca account and it trades while I work. Woke up to a $2,800 gain on an NVDA ORB setup last Thursday. The precision on entries is unlike anything I've seen at retail.",name:"Sarah Mitchell",sub:"Full-time trader, Austin TX"},
+  {stars:5,text:"As a software engineer I'm skeptical of black boxes, but Axion shows every signal's reasoning. Win rate went from 44% to 79% in six weeks. The risk management alone is worth it.",name:"David Park",sub:"Engineer & part-time trader"},
+  {stars:5,text:"The Wyckoff Accumulation algo is elite for catching pre-breakout accumulation phases. Three signals on SPY last Friday, all winners. The institutional edge is real.",name:"Jake Rivera",sub:"Day trader, 4yr exp"},
+  {stars:5,text:"Skeptical at first, but $5,100 P&L in my first month changed that. Now a lifetime member. The ex-quant pedigree shows — these aren't recycled retail indicators.",name:"Emily Watson",sub:"Equity investor, Chicago"},
+  {stars:4,text:"Solid signals with precise risk levels. The Statistical Mean Reversion strategy is perfect for my style. Would love more mid-cap coverage but the core large-cap signals are excellent.",name:"Raj Patel",sub:"Swing trader, IBKR user"},
 ];
 const tHTML = testimonials.map(t=>`
   <div class="testimonial-card">
@@ -1876,12 +1878,12 @@ function showUserDashboard() {
   const act = document.getElementById('dash-activity');
   if (act) {
     const activities = [
-      { t: '2 hours ago', text: 'Fibonacci Retracement signal generated — BTC LONG' },
-      { t: '5 hours ago', text: 'MACD Divergence trade closed — +$847.20 profit' },
-      { t: 'Yesterday', text: 'Wyckoff Spring signal accepted @ $84,230' },
-      { t: 'Yesterday', text: 'Nison Candlesticks signal expired — missed entry window' },
-      { t: '2 days ago', text: 'Fibonacci Retracement trade closed — +$1,204.60 profit' },
-      { t: '3 days ago', text: 'Exchange API keys updated (Coinbase)' },
+      { t: '2 hours ago', text: 'VWAP Reversion signal generated — NVDA LONG @ $127.42' },
+      { t: '5 hours ago', text: 'Opening Range Breakout trade closed — +$1,204.80 profit' },
+      { t: 'Yesterday', text: 'Wyckoff Accumulation signal accepted — SPY LONG @ $581.10' },
+      { t: 'Yesterday', text: 'Statistical Mean Reversion signal expired — missed entry window' },
+      { t: '2 days ago', text: 'VWAP Reversion trade closed — +$947.60 profit' },
+      { t: '3 days ago', text: 'Broker API keys updated (Alpaca)' },
     ];
     act.innerHTML = activities.map(a => `
       <div style="display:flex;gap:16px;align-items:baseline;">
@@ -1910,7 +1912,7 @@ function saveAccount() {
 }
 
 function saveExchangeKeys() {
-  const ex = document.getElementById('acc-exchange')?.value || 'coinbase';
+  const ex = document.getElementById('acc-exchange')?.value || 'alpaca';
   const key = document.getElementById('acc-api-key')?.value || '';
   const secret = document.getElementById('acc-api-secret')?.value || '';
   localStorage.setItem(`tb_${ex}_key`, key);
