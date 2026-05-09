@@ -879,8 +879,8 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <a href="#faq" onclick="navTo(event,'#faq')">FAQ</a>
   </div>
   <div class="nav-actions">
-    <button class="btn btn-ghost" onclick="openModal('login')" id="nav-login-btn" style="display:none;">Log In</button>
-    <button class="btn btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})" id="nav-signup-btn">Get Started</button>
+    <button class="btn btn-ghost" onclick="window.location.href='https://app.axiontrading.pro/login'" id="nav-login-btn">Log In</button>
+    <button class="btn btn-primary" onclick="redirectToCheckout('annual')" id="nav-signup-btn">Get Started</button>
     <div id="nav-user-menu" style="display:none;align-items:center;gap:12px;">
       <button class="btn btn-primary btn-sm" onclick="showUserDashboard()">Dashboard</button>
       <button class="btn btn-ghost btn-sm" onclick="logoutUser()">Log Out</button>
@@ -918,7 +918,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <h1 id="hero-typed"></h1>
     <p style="font-size:19px;color:var(--text2);line-height:1.7;margin-bottom:40px;max-width:560px;opacity:0;" id="hero-sub">Institutional-grade equity signals built by ex-quants. Strategies used at top prop desks and hedge funds — now available to retail traders. Auto-execute on your own brokerage.</p>
     <div class="hero-actions">
-      <button class="btn btn-primary btn-large" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Get Started</button>
       <button class="btn btn-secondary btn-large" onclick="document.getElementById('performance').scrollIntoView({behavior:'smooth'})">View Performance</button>
     </div>
     <div class="hero-trust">
@@ -1187,7 +1187,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   <h2 class="anim">Trade like the institutions do.</h2>
   <p class="anim d1">Join 340+ traders using Axion's institutional strategies to get a real edge in US equities.</p>
   <div style="position:relative;z-index:2;" class="anim d2">
-    <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Get Started Now</button>
+    <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Create Account &amp; Get Started</button>
   </div>
 </div>
 
@@ -1381,6 +1381,14 @@ function redirectToCheckout(plan) {
     alert('Payment links not configured yet. Check back soon!');
     return;
   }
+  // Require account before payment — redirect to register with plan saved
+  const token = localStorage.getItem('axion_token');
+  if (!token) {
+    localStorage.setItem('axion_pending_plan', plan);
+    window.location.href = 'https://app.axiontrading.pro/login?register=1&plan=' + plan;
+    return;
+  }
+  // User already has account — go straight to Stripe
   window.location.href = url;
 }
 
