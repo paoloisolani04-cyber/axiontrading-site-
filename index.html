@@ -1404,28 +1404,29 @@ function startHeroTyping() {
 
   let lineIdx = 0, charIdx = 0;
   let currentTarget = el;
-  const speed = 35;
-  const lineDelay = 80;
+  const charInterval = 55;   // ms per character
+  const lineDelay = 120;     // ms pause between lines
+  let lastTs = null;
+  let pauseUntil = 0;
 
   const cursor = document.createElement('span');
   cursor.className = 'typed-cursor';
   el.appendChild(cursor);
 
-  function typeNext() {
+  function tick(ts) {
     if (lineIdx >= lines.length) {
-      setTimeout(() => {
-        const sub = document.getElementById('hero-sub');
-        sub.style.animation = 'fadeInUp 0.8s var(--ease) forwards';
-        document.querySelector('.hero-actions').classList.add('go');
-        document.querySelector('.hero-trust').classList.add('go');
-      }, 200);
-      setTimeout(() => { cursor.style.animation = 'none'; cursor.style.opacity = '0'; cursor.style.transition = 'opacity 1s'; }, 2500);
+      const sub = document.getElementById('hero-sub');
+      sub.style.animation = 'fadeInUp 0.8s var(--ease) forwards';
+      document.querySelector('.hero-actions').classList.add('go');
+      document.querySelector('.hero-trust').classList.add('go');
+      setTimeout(() => { cursor.style.opacity = '0'; cursor.style.transition = 'opacity 1s'; }, 2000);
       return;
     }
 
+    if (ts < pauseUntil) { requestAnimationFrame(tick); return; }
+
     const line = lines[lineIdx];
 
-    // New line — add <br> and gradient wrapper if needed
     if (charIdx === 0) {
       if (lineIdx > 0) el.insertBefore(document.createElement('br'), cursor);
       if (line.gradient) {
@@ -1439,24 +1440,23 @@ function startHeroTyping() {
     }
 
     if (charIdx < line.text.length) {
-      // Insert character as text node directly (no span wrappers)
       if (currentTarget === el) {
-        // Insert text node before cursor
-        const tn = document.createTextNode(line.text[charIdx]);
-        el.insertBefore(tn, cursor);
+        el.insertBefore(document.createTextNode(line.text[charIdx]), cursor);
       } else {
         currentTarget.textContent += line.text[charIdx];
       }
       charIdx++;
-      setTimeout(typeNext, speed);
+      pauseUntil = ts + charInterval;
     } else {
       lineIdx++; charIdx = 0;
       currentTarget = el;
-      setTimeout(typeNext, lineDelay);
+      pauseUntil = ts + lineDelay;
     }
+
+    requestAnimationFrame(tick);
   }
 
-  typeNext();
+  requestAnimationFrame(tick);
 }
 
 /* ═══════════════════════════════════════════════════
