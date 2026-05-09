@@ -606,8 +606,8 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   box-shadow: 0 4px 15px var(--accent-glow);
 }
 .pricing-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-  max-width: 960px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  max-width: 760px; margin: 0 auto;
 }
 .price-card {
   background: var(--surface); border: 1px solid var(--border);
@@ -880,7 +880,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   </div>
   <div class="nav-actions">
     <button class="btn btn-ghost" onclick="window.location.href='https://app.axiontrading.pro/login'" id="nav-login-btn">Log In</button>
-    <button class="btn btn-primary" onclick="redirectToCheckout('annual')" id="nav-signup-btn">Get Started</button>
+    <button class="btn btn-primary" onclick="redirectToCheckout('pro_monthly')" id="nav-signup-btn">Get Started</button>
     <div id="nav-user-menu" style="display:none;align-items:center;gap:12px;">
       <button class="btn btn-primary btn-sm" onclick="showUserDashboard()">Dashboard</button>
       <button class="btn btn-ghost btn-sm" onclick="logoutUser()">Log Out</button>
@@ -918,7 +918,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <h1 id="hero-typed"></h1>
     <p style="font-size:19px;color:var(--text2);line-height:1.7;margin-bottom:40px;max-width:560px;opacity:0;" id="hero-sub">Institutional-grade equity signals built by ex-quants. Strategies used at top prop desks and hedge funds — now available to retail traders. Auto-execute on your own brokerage.</p>
     <div class="hero-actions">
-      <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Get Started</button>
+      <button class="btn btn-primary btn-large" onclick="redirectToCheckout('pro_monthly')">Get Started</button>
       <button class="btn btn-secondary btn-large" onclick="document.getElementById('performance').scrollIntoView({behavior:'smooth'})">View Performance</button>
     </div>
     <div class="hero-trust">
@@ -1116,47 +1116,48 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <div style="text-align:center;">
       <div class="section-label anim" style="justify-content:center;"><span class="line"></span> PRICING</div>
       <div class="section-title anim">One signal can pay for a year.</div>
-      <div class="section-subtitle anim" style="margin:0 auto 20px;">Every plan includes all 4 institutional strategies. No hidden fees.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 32px;">All 4 institutional strategies included. No hidden fees.</div>
+      <div class="pricing-toggle anim">
+        <button id="tog-monthly" class="active" onclick="setPricingBilling('monthly')">Monthly</button>
+        <button id="tog-annual" onclick="setPricingBilling('annual')">Annual &nbsp;<span style="font-size:11px;background:rgba(16,185,129,0.15);color:var(--green2);padding:2px 7px;border-radius:20px;font-weight:700;">Save 33%</span></button>
+      </div>
     </div>
     <div class="pricing-grid">
+      <!-- Signals -->
       <div class="price-card anim tilt-card" data-tilt>
-        <div class="price-tier">Monthly</div>
-        <div class="price-amount"><span class="currency">$</span><span class="value">49</span><span class="period">/month</span></div>
-        <div class="price-desc">Full access to all strategies and signals.</div>
+        <div class="price-tier">Signals</div>
+        <div class="price-amount">
+          <span class="currency">$</span>
+          <span class="value" id="price-signals">49</span>
+          <span class="period" id="period-signals">/month</span>
+        </div>
+        <div class="price-desc" id="desc-signals">Real-time institutional signals on all US equities.</div>
         <ul class="price-features">
           <li><span class="check">&#10003;</span> All 4 institutional strategies</li>
           <li><span class="check">&#10003;</span> Real-time US equity signals</li>
-          <li><span class="check">&#10003;</span> Alpaca & IBKR integration</li>
+          <li><span class="check">&#10003;</span> Entry, stop loss & take profit</li>
           <li><span class="check">&#10003;</span> Signal history & analytics</li>
-          <li><span class="check">&#10003;</span> Email & chat support</li>
+          <li><span class="check">&#10003;</span> Email support</li>
         </ul>
-        <button class="btn btn-secondary" onclick="redirectToCheckout('monthly')">Subscribe</button>
+        <button class="btn btn-secondary" id="btn-signals" onclick="redirectToCheckout('signals_monthly')">Get Started</button>
       </div>
+      <!-- Pro -->
       <div class="price-card popular anim d1 tilt-card" data-tilt>
-        <div class="price-tier">Pro Annual <span class="price-save">Save 38%</span></div>
-        <div class="price-amount"><span class="currency">$</span><span class="value">29</span><span class="period">/mo, billed yearly</span></div>
-        <div class="price-desc">Everything in Monthly plus auto-execution.</div>
+        <div class="price-tier">Pro <span class="price-save" id="pro-save-badge" style="display:none;">Save 33%</span></div>
+        <div class="price-amount">
+          <span class="currency">$</span>
+          <span class="value" id="price-pro">69</span>
+          <span class="period" id="period-pro">/month</span>
+        </div>
+        <div class="price-desc" id="desc-pro">Everything in Signals plus full auto-execution.</div>
         <ul class="price-features">
-          <li><span class="check">&#10003;</span> Everything in Monthly</li>
+          <li><span class="check">&#10003;</span> Everything in Signals</li>
           <li><span class="check">&#10003;</span> Auto-execution engine</li>
-          <li><span class="check">&#10003;</span> Advanced risk management</li>
-          <li><span class="check">&#10003;</span> Custom strategy parameters</li>
+          <li><span class="check">&#10003;</span> Risk management controls</li>
+          <li><span class="check">&#10003;</span> Alpaca, IBKR & TD integration</li>
           <li><span class="check">&#10003;</span> Priority support (&lt; 1hr)</li>
         </ul>
-        <button class="btn btn-primary" onclick="redirectToCheckout('annual')">Subscribe</button>
-      </div>
-      <div class="price-card anim d2 tilt-card" data-tilt>
-        <div class="price-tier">Lifetime</div>
-        <div class="price-amount"><span class="currency">$</span><span class="value">799</span><span class="period">one-time</span></div>
-        <div class="price-desc">Pay once, use forever. Lock in before prices go up.</div>
-        <ul class="price-features">
-          <li><span class="check">&#10003;</span> Everything in Pro</li>
-          <li><span class="check">&#10003;</span> Lifetime strategy updates</li>
-          <li><span class="check">&#10003;</span> Early access: new strategies</li>
-          <li><span class="check">&#10003;</span> 1-on-1 onboarding call</li>
-          <li><span class="check">&#10003;</span> Direct access to the team</li>
-        </ul>
-        <button class="btn btn-green" onclick="redirectToCheckout('lifetime')">Buy Lifetime Access</button>
+        <button class="btn btn-primary" id="btn-pro" onclick="redirectToCheckout('pro_monthly')">Get Started</button>
       </div>
     </div>
   </div>
@@ -1187,7 +1188,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
   <h2 class="anim">Trade like the institutions do.</h2>
   <p class="anim d1">Join 340+ traders using Axion's institutional strategies to get a real edge in US equities.</p>
   <div style="position:relative;z-index:2;" class="anim d2">
-    <button class="btn btn-primary btn-large" onclick="redirectToCheckout('annual')">Create Account &amp; Get Started</button>
+    <button class="btn btn-primary btn-large" onclick="redirectToCheckout('pro_monthly')">Create Account &amp; Get Started</button>
   </div>
 </div>
 
@@ -1360,10 +1361,39 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
    STRIPE PAYMENT LINKS — paste your links here
    ═══════════════════════════════════════════════════ */
 const STRIPE_LINKS = {
-  monthly:  'https://buy.stripe.com/3cIeVe1AsbjHfxC58pfnO02',
-  annual:   'https://buy.stripe.com/3cI6oIa6Y4Vj2KQ0S9fnO01',
-  lifetime: 'https://buy.stripe.com/7sYfZicf6evT7168kBfnO00',
+  signals_monthly: 'PASTE_SIGNALS_MONTHLY_LINK',
+  signals_annual:  'PASTE_SIGNALS_ANNUAL_LINK',
+  pro_monthly:     'PASTE_PRO_MONTHLY_LINK',
+  pro_annual:      'PASTE_PRO_ANNUAL_LINK',
 };
+
+let _billingCycle = 'monthly';
+function setPricingBilling(mode) {
+  _billingCycle = mode;
+  document.getElementById('tog-monthly').classList.toggle('active', mode === 'monthly');
+  document.getElementById('tog-annual').classList.toggle('active', mode === 'annual');
+  if (mode === 'annual') {
+    document.getElementById('price-signals').textContent = '33';
+    document.getElementById('period-signals').textContent = '/mo · billed $396/yr';
+    document.getElementById('desc-signals').textContent = 'Signals plan, billed annually. Save $192 vs monthly.';
+    document.getElementById('btn-signals').onclick = () => redirectToCheckout('signals_annual');
+    document.getElementById('price-pro').textContent = '46';
+    document.getElementById('period-pro').textContent = '/mo · billed $552/yr';
+    document.getElementById('desc-pro').textContent = 'Pro plan with auto-execution, billed annually. Save $276 vs monthly.';
+    document.getElementById('btn-pro').onclick = () => redirectToCheckout('pro_annual');
+    document.getElementById('pro-save-badge').style.display = 'inline-block';
+  } else {
+    document.getElementById('price-signals').textContent = '49';
+    document.getElementById('period-signals').textContent = '/month';
+    document.getElementById('desc-signals').textContent = 'Real-time institutional signals on all US equities.';
+    document.getElementById('btn-signals').onclick = () => redirectToCheckout('signals_monthly');
+    document.getElementById('price-pro').textContent = '69';
+    document.getElementById('period-pro').textContent = '/month';
+    document.getElementById('desc-pro').textContent = 'Everything in Signals plus full auto-execution.';
+    document.getElementById('btn-pro').onclick = () => redirectToCheckout('pro_monthly');
+    document.getElementById('pro-save-badge').style.display = 'none';
+  }
+}
 
 const STRIPE_PORTAL = 'https://billing.stripe.com/p/login/7sYfZicf6evT7168kBfnO00';
 
