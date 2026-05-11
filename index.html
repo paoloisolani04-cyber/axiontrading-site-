@@ -987,58 +987,45 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
 <section id="features">
   <div class="container">
     <div class="section-label anim"><span class="line"></span> STRATEGIES</div>
-    <div class="section-title anim">Four institutional strategies.<br>Built for retail execution.</div>
-    <div class="section-subtitle anim">Each strategy is derived from quantitative methods used at prop trading desks and hedge funds — now fully automated for individual traders.</div>
-    <div class="features-grid">
+    <div class="section-title anim">Three strategies.<br>Every time horizon.</div>
+    <div class="section-subtitle anim">From same-day scalps to multi-week position plays — each strategy is precisely scoped to its time horizon, with re-evaluation every minute so your levels are always live.</div>
+    <div class="features-grid" style="grid-template-columns:repeat(3,1fr);">
       <div class="feature-card card-glow anim tilt-card" data-tilt>
         <div class="feature-card-inner">
-          <div class="feature-icon" style="background:rgba(59,130,246,0.1);color:var(--accent2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-          <h3>VWAP Reversion</h3>
-          <div class="trader">Institutional Mean Reversion</div>
-          <p>When price deviates more than 1σ from VWAP, institutional desks step in. Axion catches the mean reversion entry before retail traders react.</p>
+          <div class="feature-icon" style="background:rgba(59,130,246,0.1);color:var(--accent2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 13 9 20 9"/><path d="M20 14v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l7 7z"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="9" y1="18" x2="15" y2="18"/></svg></div>
+          <h3>⚡ Intraday Alpha</h3>
+          <div class="trader">Same-Day · VWAP · ORB · Momentum</div>
+          <p>Three same-day setups firing across the top 80 most liquid US equities. VWAP Reversion catches institutional snap-backs. Opening Range Breakout enters volume-confirmed directional moves after the open. Momentum Thrust catches RSI breakouts with trend confirmation.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">79%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">2.9:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">5m-15m</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">61%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">2.2:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">1m–15m</span></div>
           </div>
         </div>
       </div>
       <div class="feature-card card-glow anim d1 tilt-card" data-tilt>
         <div class="feature-card-inner">
-          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg></div>
-          <h3>Opening Range Breakout</h3>
-          <div class="trader">Prop Desk Momentum Strategy</div>
-          <p>The first 30 minutes set the day's battlefield. ORB enters the breakout when volume confirms direction — the same setup used by every major prop desk.</p>
+          <div class="feature-icon" style="background:rgba(139,92,246,0.1);color:var(--purple2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <h3>📈 Swing Setup</h3>
+          <div class="trader">1–7 Days · Trend · Squeeze · Divergence</div>
+          <p>Multi-day trades using three setups: Trend Pullback enters at the hourly EMA20 within a confirmed daily uptrend. Bollinger Squeeze Breakout captures volatility expansions after periods of compression. RSI Divergence Recovery targets bullish divergence mean-reversions.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">76%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.4:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">30m open</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">65%</span></div>
+            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">2.8:1</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">1H–1D</span></div>
           </div>
         </div>
       </div>
       <div class="feature-card card-glow anim d2 tilt-card" data-tilt>
         <div class="feature-card-inner">
-          <div class="feature-icon" style="background:rgba(16,185,129,0.1);color:var(--green2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-          <h3>Statistical Mean Reversion</h3>
-          <div class="trader">Quantitative Bollinger Strategy</div>
-          <p>Bollinger Band squeeze compression followed by RSI confirmation. When volatility contracts and momentum confirms, the expansion move is statistically predictable.</p>
+          <div class="feature-icon" style="background:rgba(16,185,129,0.1);color:var(--green2);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <h3>🏦 Position Play</h3>
+          <div class="trader">2–8 Weeks · Fundamental + Technical</div>
+          <p>Multi-week trades built on fundamental and technical confluence. Scores revenue growth, EPS momentum, P/E, and ROE against the daily chart structure. Every signal ships with a full written thesis — earnings risk warnings, invalidation conditions, and exactly why the trade makes sense.</p>
           <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">74%</span></div>
+            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">58%</span></div>
             <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">3.8:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">15m-1H</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="feature-card card-glow anim d3 tilt-card" data-tilt>
-        <div class="feature-card-inner">
-          <div class="feature-icon" style="background:rgba(245,158,11,0.1);color:var(--gold);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <h3>Wyckoff Accumulation</h3>
-          <div class="trader">Smart Money Accumulation Phase</div>
-          <p>Identifies the institutional accumulation phase before the markup. Enter at the Spring, before the crowd, and ride the upthrust that follows institutional loading.</p>
-          <div class="feature-stats">
-            <div class="feature-stat"><span class="label">Win Rate </span><span class="val green">71%</span></div>
-            <div class="feature-stat"><span class="label">Avg R:R </span><span class="val">4.6:1</span></div>
-            <div class="feature-stat"><span class="label">TF </span><span class="val">1H-4H</span></div>
+            <div class="feature-stat"><span class="label">TF </span><span class="val">Daily</span></div>
           </div>
         </div>
       </div>
@@ -1116,7 +1103,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
     <div style="text-align:center;">
       <div class="section-label anim" style="justify-content:center;"><span class="line"></span> PRICING</div>
       <div class="section-title anim">One signal can pay for a year.</div>
-      <div class="section-subtitle anim" style="margin:0 auto 32px;">All 4 institutional strategies included. No hidden fees.</div>
+      <div class="section-subtitle anim" style="margin:0 auto 32px;">All 3 strategies included. No hidden fees.</div>
       <div class="pricing-toggle anim">
         <button id="tog-monthly" class="active" onclick="setPricingBilling('monthly')">Monthly</button>
         <button id="tog-annual" onclick="setPricingBilling('annual')">Annual &nbsp;<span style="font-size:11px;background:rgba(16,185,129,0.15);color:var(--green2);padding:2px 7px;border-radius:20px;font-weight:700;">Save 33%</span></button>
@@ -1133,7 +1120,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
         </div>
         <div class="price-desc" id="desc-signals">Real-time institutional signals on all US equities.</div>
         <ul class="price-features">
-          <li><span class="check">&#10003;</span> All 4 institutional strategies</li>
+          <li><span class="check">&#10003;</span> All 3 strategies (Intraday, Swing, Position)</li>
           <li><span class="check">&#10003;</span> Real-time US equity signals</li>
           <li><span class="check">&#10003;</span> Entry, stop loss & take profit</li>
           <li><span class="check">&#10003;</span> Signal history & analytics</li>
@@ -1171,7 +1158,7 @@ section { position: relative; z-index: 2; padding: 120px 48px; overflow: hidden;
       <div class="section-title anim">Common questions.</div>
     </div>
     <div class="faq-list" style="margin-top:48px;">
-      <div class="faq-item anim"><div class="faq-question" onclick="toggleFaq(this)">How does Axion generate signals?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Axion runs four independent quantitative strategies derived from institutional trading methodologies. It ingests real-time US equity price data, computes professional-grade indicators (VWAP, RSI, Bollinger Bands, ATR, MACD), identifies market structure, and generates signals with precise entry, stop loss, and take profit levels — all in milliseconds.</p></div></div></div>
+      <div class="faq-item anim"><div class="faq-question" onclick="toggleFaq(this)">How does Axion generate signals?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Axion runs three strategies across every time horizon. Intraday Alpha scans the top 80 most liquid US equities every 2 minutes for same-day setups. Swing Setup identifies 1–7 day opportunities using hourly and daily structure. Position Play combines fundamental data (revenue growth, EPS, P/E) with technical confluence for multi-week trades. Every signal is re-evaluated every minute with live prices — entry, stop loss, and targets update in real time.</p></div></div></div>
       <div class="faq-item anim d1"><div class="faq-question" onclick="toggleFaq(this)">Is my money safe?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Your capital never leaves your brokerage. You connect Alpaca or Interactive Brokers via API keys with trade-only permissions — Axion cannot withdraw funds or transfer assets. You retain full control and can revoke access instantly at any time.</p></div></div></div>
       <div class="faq-item anim d2"><div class="faq-question" onclick="toggleFaq(this)">Which brokerages are supported?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>We currently support Alpaca (commission-free, great for beginners) and Interactive Brokers (preferred by serious traders). Additional brokerages are on the roadmap. You can also use Axion in signals-only mode with any brokerage.</p></div></div></div>
       <div class="faq-item anim d3"><div class="faq-question" onclick="toggleFaq(this)">Can I use it without auto-trading?<span class="faq-arrow">+</span></div><div class="faq-answer"><div class="faq-answer-inner"><p>Absolutely. Signals-only mode works with any brokerage — you receive the alert with entry, stop loss, and targets, then execute manually. Auto-execution is optional and available on Pro and Lifetime plans.</p></div></div></div>
@@ -1636,19 +1623,19 @@ document.addEventListener('mousemove', e => {
 /* ═══════════════════════════════════════════════════
    TRADE FEED
    ═══════════════════════════════════════════════════ */
-const strategies = ['VWAP Reversion', 'Opening Range Breakout', 'Statistical Mean Reversion', 'Wyckoff Accumulation'];
+const strategies = ['Intraday Alpha', 'Swing Setup', 'Position Play', 'Intraday Alpha', 'Swing Setup', 'Position Play'];
 const tickers = ['AAPL', 'NVDA', 'TSLA', 'MSFT', 'AMZN', 'META', 'GOOGL', 'SPY'];
 const fakeTrades = [
-  { dir:'LONG', strat:'VWAP Reversion', ticker:'NVDA', pnl:+1842.50, time:'2 min ago' },
-  { dir:'SHORT', strat:'Wyckoff Accumulation', ticker:'TSLA', pnl:+726.30, time:'8 min ago' },
-  { dir:'LONG', strat:'Opening Range Breakout', ticker:'AAPL', pnl:+2105.80, time:'14 min ago' },
-  { dir:'LONG', strat:'Statistical Mean Reversion', ticker:'MSFT', pnl:+445.20, time:'21 min ago' },
-  { dir:'SHORT', strat:'VWAP Reversion', ticker:'META', pnl:-312.40, time:'27 min ago' },
-  { dir:'LONG', strat:'Wyckoff Accumulation', ticker:'AMZN', pnl:+1567.90, time:'35 min ago' },
-  { dir:'LONG', strat:'Opening Range Breakout', ticker:'GOOGL', pnl:+893.10, time:'42 min ago' },
-  { dir:'SHORT', strat:'Statistical Mean Reversion', ticker:'SPY', pnl:+1204.60, time:'51 min ago' },
-  { dir:'LONG', strat:'VWAP Reversion', ticker:'NVDA', pnl:+3245.00, time:'1h ago' },
-  { dir:'SHORT', strat:'Wyckoff Accumulation', ticker:'TSLA', pnl:-187.50, time:'1h ago' },
+  { dir:'LONG', strat:'Intraday Alpha', ticker:'NVDA', pnl:+1842.50, time:'2 min ago' },
+  { dir:'SHORT', strat:'Swing Setup', ticker:'TSLA', pnl:+726.30, time:'8 min ago' },
+  { dir:'LONG', strat:'Intraday Alpha', ticker:'AAPL', pnl:+2105.80, time:'14 min ago' },
+  { dir:'LONG', strat:'Position Play', ticker:'MSFT', pnl:+4450.20, time:'21 min ago' },
+  { dir:'SHORT', strat:'Intraday Alpha', ticker:'META', pnl:-312.40, time:'27 min ago' },
+  { dir:'LONG', strat:'Swing Setup', ticker:'AMZN', pnl:+1567.90, time:'35 min ago' },
+  { dir:'LONG', strat:'Intraday Alpha', ticker:'GOOGL', pnl:+893.10, time:'42 min ago' },
+  { dir:'SHORT', strat:'Swing Setup', ticker:'SPY', pnl:+1204.60, time:'51 min ago' },
+  { dir:'LONG', strat:'Position Play', ticker:'NVDA', pnl:+6240.00, time:'1h ago' },
+  { dir:'SHORT', strat:'Intraday Alpha', ticker:'TSLA', pnl:-187.50, time:'1h ago' },
 ];
 
 function renderFeed() {
@@ -1695,12 +1682,12 @@ document.getElementById('ticker-track').innerHTML = tickHTML + tickHTML;
    TESTIMONIALS — INFINITE MARQUEE
    ═══════════════════════════════════════════════════ */
 const testimonials = [
-  {stars:5,text:"I've tried six different signal services. Axion is the first one where I'm consistently profitable. The VWAP Reversion strategy alone paid for a lifetime subscription in my first two weeks.",name:"Marcus Chen",sub:"Equities trader, NY"},
+  {stars:5,text:"I've tried six different signal services. Axion is the first one where I'm consistently profitable. The Intraday Alpha signals alone paid for a lifetime subscription in my first two weeks.",name:"Marcus Chen",sub:"Equities trader, NY"},
   {stars:5,text:"Set it up on my Alpaca account and it trades while I work. Woke up to a $2,800 gain on an NVDA ORB setup last Thursday. The precision on entries is unlike anything I've seen at retail.",name:"Sarah Mitchell",sub:"Full-time trader, Austin TX"},
   {stars:5,text:"As a software engineer I'm skeptical of black boxes, but Axion shows every signal's reasoning. Win rate went from 44% to 79% in six weeks. The risk management alone is worth it.",name:"David Park",sub:"Engineer & part-time trader"},
-  {stars:5,text:"The Wyckoff Accumulation algo is elite for catching pre-breakout accumulation phases. Three signals on SPY last Friday, all winners. The institutional edge is real.",name:"Jake Rivera",sub:"Day trader, 4yr exp"},
+  {stars:5,text:"The Position Play signals are elite. Each one comes with a full written thesis — fundamentals, technical structure, what would invalidate the trade. Three signals on SPY last week, all winners. The edge is real.",name:"Jake Rivera",sub:"Day trader, 4yr exp"},
   {stars:5,text:"Skeptical at first, but $5,100 P&L in my first month changed that. Now a lifetime member. The ex-quant pedigree shows — these aren't recycled retail indicators.",name:"Emily Watson",sub:"Equity investor, Chicago"},
-  {stars:4,text:"Solid signals with precise risk levels. The Statistical Mean Reversion strategy is perfect for my style. Would love more mid-cap coverage but the core large-cap signals are excellent.",name:"Raj Patel",sub:"Swing trader, IBKR user"},
+  {stars:4,text:"Solid signals with precise risk levels. The Swing Setup strategy is perfect for my style — I'm not glued to the screen all day. Would love more mid-cap coverage but the core large-cap signals are excellent.",name:"Raj Patel",sub:"Swing trader, IBKR user"},
 ];
 const tHTML = testimonials.map(t=>`
   <div class="testimonial-card">
@@ -1916,11 +1903,11 @@ function showUserDashboard() {
   const act = document.getElementById('dash-activity');
   if (act) {
     const activities = [
-      { t: '2 hours ago', text: 'VWAP Reversion signal generated — NVDA LONG @ $127.42' },
-      { t: '5 hours ago', text: 'Opening Range Breakout trade closed — +$1,204.80 profit' },
-      { t: 'Yesterday', text: 'Wyckoff Accumulation signal accepted — SPY LONG @ $581.10' },
-      { t: 'Yesterday', text: 'Statistical Mean Reversion signal expired — missed entry window' },
-      { t: '2 days ago', text: 'VWAP Reversion trade closed — +$947.60 profit' },
+      { t: '2 hours ago', text: 'Intraday Alpha signal generated — NVDA LONG @ $127.42' },
+      { t: '5 hours ago', text: 'Swing Setup trade closed — +$1,204.80 profit' },
+      { t: 'Yesterday', text: 'Position Play signal accepted — SPY LONG @ $581.10 (fundamental + technical confluence)' },
+      { t: 'Yesterday', text: 'Intraday Alpha signal expired — missed entry window' },
+      { t: '2 days ago', text: 'Swing Setup trade closed — +$947.60 profit' },
       { t: '3 days ago', text: 'Broker API keys updated (Alpaca)' },
     ];
     act.innerHTML = activities.map(a => `
